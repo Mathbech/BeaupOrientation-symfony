@@ -13,6 +13,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+    public function __toString()
+    {
+        return $this->getUsername();
+    }
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -44,6 +49,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $active = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Schools $schools = null;
 
     public function __construct()
     {
@@ -171,6 +179,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActive(bool $active): static
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getSchools(): ?Schools
+    {
+        return $this->schools;
+    }
+
+    public function setSchools(?Schools $schools): static
+    {
+        $this->schools = $schools;
 
         return $this;
     }
