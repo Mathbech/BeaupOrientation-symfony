@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -53,11 +55,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Schools $schools = null;
 
+    /**
+     * @var Collection<int, Courses>
+     */
+    #[ORM\OneToMany(targetEntity: Courses::class, mappedBy: 'user')]
+    private Collection $courses;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->active = true;
+        $this->courses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,6 +200,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSchools(?Schools $schools): static
     {
         $this->schools = $schools;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Courses>
+     */
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
+
+    public function addCourse(Courses $course): static
+    {
+        if (!$this->courses->contains($course)) {
+            $this->courses->add($course);
+            $course->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCourse(Courses $course): static
+    {
+        if ($this->courses->removeElement($course)) {
+            // set the owning side to null (unless already changed)
+            if ($course->getUser() === $this) {
+                $course->setUser(null);
+            }
+        }
 
         return $this;
     }

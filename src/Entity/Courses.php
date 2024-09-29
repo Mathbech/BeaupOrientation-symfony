@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Courses
 {
+
+    public function __toString()
+    {
+        return $this->getSessionName();
+    }
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,6 +34,9 @@ class Courses
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'courses')]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -91,6 +99,18 @@ class Courses
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
