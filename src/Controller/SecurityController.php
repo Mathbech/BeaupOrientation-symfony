@@ -9,7 +9,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route(path: '/login', name: 'app_login')]
+    #[Route(path: '/connexion', name: 'connexion')]
+    #[Route(path: '/login', name: 'login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
@@ -24,6 +25,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    #[Route(path: '/déconnexion', name: 'logout')]
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
