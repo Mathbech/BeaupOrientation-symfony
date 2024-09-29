@@ -15,46 +15,28 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use App\Repository\UserRepository;
 
 class LoginAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'login';
+    public const LOGIN_ROUTE = 'app_login';
 
-    private UrlGeneratorInterface $urlGenerator; // Déclaration explicite de la propriété
-    private UserRepository $userRepository; // Déclaration explicite de la propriété
-
-    public function __construct(UrlGeneratorInterface $urlGenerator, UserRepository $userRepository)
+    public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->userRepository = $userRepository;
     }
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->get('email', '');
-        $password = $request->get('password', '');
-        $csrfToken = $request->get('_csrf_token', '');
+        $email = $request->getPayload()->getString('email');
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
-            new UserBadge($email, function ($userIdentifier) {
-                $user = $this->userRepository->findOneByEmail($userIdentifier);
-
-                if (!$user) {
-                    throw new CustomUserMessageAuthenticationException('Invalid crédentials.');
-                }
-
-
-                return $user;
-            }),
-            new PasswordCredentials($password),
+            new UserBadge($email),
+            new PasswordCredentials($request->getPayload()->getString('password')),
             [
-                new CsrfTokenBadge('authenticate', $csrfToken),
+                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
                 new RememberMeBadge(),
             ]
         );
@@ -66,10 +48,8 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // if (in_array('ROLE_ADMIN', $token->getUser()->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('admin'));
-        // }
-        // return new RedirectResponse($this->urlGenerator->generate('user'));
+        
+        return new RedirectResponse($this->urlGenerator->generate('admin'));
     }
 
     protected function getLoginUrl(Request $request): string
