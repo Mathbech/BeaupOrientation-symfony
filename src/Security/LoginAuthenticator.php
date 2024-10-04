@@ -49,7 +49,11 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         
-        return new RedirectResponse($this->urlGenerator->generate('admin'));
+        if (in_array('ROLE_ADMIN', $token->getUser()->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('admin'));
+        }
+        return new RedirectResponse($this->urlGenerator->generate('teacher_dashboard'));
+
     }
 
     protected function getLoginUrl(Request $request): string
