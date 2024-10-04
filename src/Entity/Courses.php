@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CoursesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CoursesRepository::class)]
@@ -37,6 +38,13 @@ class Courses
 
     #[ORM\ManyToOne(inversedBy: 'courses')]
     private ?User $user = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->active = true;
+        $this->pinCode = substr(str_shuffle('0123456789'), 0, 4);
+    }
 
     public function getId(): ?int
     {

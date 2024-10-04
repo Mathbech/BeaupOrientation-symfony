@@ -15,14 +15,12 @@ class CoursesCrudController extends AbstractCrudController
         return Courses::class;
     }
 
-    /*
+    
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            TextField::new('sessionName'),
         ];
     }
-    */
+    
 }
