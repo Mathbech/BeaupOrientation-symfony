@@ -3,6 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,7 +15,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ApiResource]
+#[ApiResource(security: "is_granted('ROLE_USER')")]
+#[Get]
+#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Post]
+#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
+
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -54,14 +64,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $active = null;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?Schools $schools = null;
-
     /**
      * @var Collection<int, Courses>
      */
     #[ORM\OneToMany(targetEntity: Courses::class, mappedBy: 'user')]
     private Collection $courses;
+
+    #[ORM\ManyToOne(inversedBy: 'teachers')]
+    private ?Schools $schools = null;
 
     public function __construct()
     {
@@ -194,18 +204,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSchools(): ?Schools
-    {
-        return $this->schools;
-    }
-
-    public function setSchools(?Schools $schools): static
-    {
-        $this->schools = $schools;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Courses>
      */
@@ -232,6 +230,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $course->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSchools(): ?Schools
+    {
+        return $this->schools;
+    }
+
+    public function setSchools(?Schools $schools): static
+    {
+        $this->schools = $schools;
 
         return $this;
     }

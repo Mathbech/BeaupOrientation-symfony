@@ -3,6 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\SchoolsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SchoolsRepository::class)]
 #[ApiResource]
+#[Get(security: "is_granted('ROLE_ADMIN') or object == user")]
+#[Put(security: "is_granted('ROLE_ADMIN')")]
+#[Post(security: "is_granted('ROLE_ADMIN')")]
+#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 class Schools
 {
     public function __toString()
@@ -49,11 +57,11 @@ class Schools
      * @var Collection<int, User>
      */
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'schools')]
-    private Collection $users;
+    private Collection $teachers;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->teachers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,27 +168,27 @@ class Schools
     /**
      * @return Collection<int, User>
      */
-    public function getUsers(): Collection
+    public function getTeachers(): Collection
     {
-        return $this->users;
+        return $this->teachers;
     }
 
-    public function addUser(User $user): static
+    public function addTeacher(User $teacher): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->setSchools($this);
+        if (!$this->teachers->contains($teacher)) {
+            $this->teachers->add($teacher);
+            $teacher->setSchools($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): static
+    public function removeTeacher(User $teacher): static
     {
-        if ($this->users->removeElement($user)) {
+        if ($this->teachers->removeElement($teacher)) {
             // set the owning side to null (unless already changed)
-            if ($user->getSchools() === $this) {
-                $user->setSchools(null);
+            if ($teacher->getSchools() === $this) {
+                $teacher->setSchools(null);
             }
         }
 
