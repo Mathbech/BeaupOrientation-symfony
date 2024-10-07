@@ -3,11 +3,20 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\MarkersRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MarkersRepository::class)]
 #[ApiResource]
+#[GetCollection(security: "object.getTeacher() == user")] // Accessible à tous les utilisateurs connectés
+#[Get(security: "object.getTeacher() == user")] // Accessible uniquement au propriétaire
+#[Put(security: "object.getTeacher() == user")] // Modifiable uniquement par le propriétaire
+#[Post(security: "is_granted('ROLE_USER')")] // Seuls les utilisateurs authentifiés peuvent créer des marqueurs
+
 class Markers
 {
     #[ORM\Id]

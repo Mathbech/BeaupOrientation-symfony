@@ -14,10 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SchoolsRepository::class)]
 #[ApiResource]
-#[Get(security: "is_granted('ROLE_ADMIN') or object == user")]
-#[Put(security: "is_granted('ROLE_ADMIN')")]
-#[Post(security: "is_granted('ROLE_ADMIN')")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
+#[Get(security: "is_granted('ROLE_ADMIN') or object.getTeachers().contains(user)")]
+#[Put(security: "is_granted('ROLE_ADMIN') or object.getTeachers().contains(user)")]
+#[Post(security: "is_granted('ROLE_ADMIN')")]
 class Schools
 {
     public function __toString()
