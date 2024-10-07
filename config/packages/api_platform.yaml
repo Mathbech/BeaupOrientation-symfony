@@ -1,5 +1,11 @@
 api_platform:
-    title: Hello API Platform
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
+
+    title: BeaupOrientation API
     version: 1.0.0
     defaults:
         stateless: true

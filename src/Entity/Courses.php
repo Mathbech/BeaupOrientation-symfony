@@ -5,8 +5,11 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CoursesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: CoursesRepository::class)]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['pinCode'])]
+#[UniqueEntity(fields: ['pinCode'], message: 'This code is already used')]
 #[ApiResource]
 class Courses
 {
@@ -37,6 +40,13 @@ class Courses
 
     #[ORM\ManyToOne(inversedBy: 'courses')]
     private ?User $user = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->active = true;
+        $this->pinCode = substr(str_shuffle('0123456789'), 0, 4);
+    }
 
     public function getId(): ?int
     {
