@@ -2,8 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Courses;
-use App\Entity\Markers;
 use App\Entity\Schools;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -33,8 +31,6 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('User', 'fas fa-list', User::class);
-        yield MenuItem::linkToCrud('Courses', 'fa fa-exit', Courses::class);
-        yield MenuItem::linkToCrud('Markers', 'fas fa-list', Markers::class);
         yield MenuItem::linkToCrud('Schools', 'fas fa-list', Schools::class);
 
     }
