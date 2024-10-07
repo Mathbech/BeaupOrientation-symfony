@@ -39,6 +39,9 @@ class Markers
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deleting = null;
 
+    #[ORM\ManyToOne(inversedBy: 'markers')]
+    private ?User $teacher = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +139,18 @@ class Markers
     public function setDeleting(?\DateTimeImmutable $deleting): static
     {
         $this->deleting = $deleting;
+
+        return $this;
+    }
+
+    public function getTeacher(): ?User
+    {
+        return $this->teacher;
+    }
+
+    public function setTeacher(?User $teacher): static
+    {
+        $this->teacher = $teacher;
 
         return $this;
     }

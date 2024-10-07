@@ -73,12 +73,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'teachers')]
     private ?Schools $schools = null;
 
+    /**
+     * @var Collection<int, Markers>
+     */
+    #[ORM\OneToMany(targetEntity: Markers::class, mappedBy: 'teacher')]
+    private Collection $markers;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->active = true;
         $this->courses = new ArrayCollection();
+        $this->markers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -242,6 +249,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSchools(?Schools $schools): static
     {
         $this->schools = $schools;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Markers>
+     */
+    public function getMarkers(): Collection
+    {
+        return $this->markers;
+    }
+
+    public function addMarker(Markers $marker): static
+    {
+        if (!$this->markers->contains($marker)) {
+            $this->markers->add($marker);
+            $marker->setTeacher($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarker(Markers $marker): static
+    {
+        if ($this->markers->removeElement($marker)) {
+            // set the owning side to null (unless already changed)
+            if ($marker->getTeacher() === $this) {
+                $marker->setTeacher(null);
+            }
+        }
 
         return $this;
     }
