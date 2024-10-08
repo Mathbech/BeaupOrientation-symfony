@@ -16,8 +16,10 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ApiResource(security: "is_granted('ROLE_USER')")]
+// #[Get (security: "is_granted('ROLE_ADMIN') or object.getEmail() == user.getUserIdentifier()")]
+// #[Put (security: "is_granted('ROLE_ADMIN') or object.getEmail() == user.getUserIdentifier()")]
 #[Get]
-#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Put]
 #[Post]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 
