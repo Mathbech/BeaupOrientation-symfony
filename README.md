@@ -54,3 +54,16 @@ Vous pouvez suivre la gestion du projet sur Trello : [Lien Trello](https://trell
     ``` sh
      php bin/console lexik:jwt:generate-keypair
     ```
+
+## Connexion à l'api
+    Url de connexion 
+    ``` sh
+    https://localhost/auth
+    ```
+
+## Accès aux ressources
+    Url 
+    ```sh
+    https://localhost/api/{entité}
+    ```
+    
