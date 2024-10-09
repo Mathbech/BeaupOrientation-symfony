@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\ApiResource\RegistrationController;
+use App\Dto\RegisterRequest;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,7 +17,16 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ApiResource(security: "is_granted('ROLE_USER')")]
+#[ApiResource(operations: [
+    new Post(
+        uriTemplate: '/register',
+        controller: RegistrationController::class,
+        input: RegisterRequest::class,
+        output: User::class,
+        validate: true
+    )
+]
+)]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[Get]
 #[Put]

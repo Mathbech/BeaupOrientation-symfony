@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SchoolsRepository::class)]
-#[ApiResource]
+#[ApiResource(security: "is_granted('ROLE_USER')")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[Get(security: "is_granted('ROLE_ADMIN') or object.getTeachers().contains(user)")]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.getTeachers().contains(user)")]
