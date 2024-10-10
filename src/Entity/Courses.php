@@ -15,7 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['pinCode'])]
 #[UniqueEntity(fields: ['pinCode'], message: 'This code is already used')]
 #[ApiResource(security: "is_granted('ROLE_USER')")]
-#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
+#[GetCollection(security: "is_granted('ROLE_USER')")]
 #[Get]
 #[Put]
 #[Post]
