@@ -9,6 +9,7 @@ Beaup'Orientation est une application Symfony conçue pour suivre les courreur e
 ## Lien de gestion de projet
 
 Vous pouvez suivre la gestion du projet sur Trello : [Lien Trello](https://trello.com/b/qlucubGq)
+Vous pouvez également visionner les maquettes et wireframe sur figma: [Lien Figma](https://www.figma.com/design/v70S8t0TYmwUVtUorvxdQ0/Projet-beauporientation?node-id=57-33&t=F7zuzqPqAqpOQWLo-1)
 
 ## Prérequis
 
