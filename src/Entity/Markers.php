@@ -13,9 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MarkersRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(security: "is_granted('ROLE_USER')"), // Filtrage via un filtre Doctrine ou service personnalisé
-        new Get(security: "is_granted('ROLE_USER') and object.getTeacher() == user"), // Seul le propriétaire accède à l'élément spécifique
-        new Put(security: "is_granted('ROLE_USER') and object.getTeacher() == user"), // Seul le propriétaire peut modifier
+        new Get(), 
+        new Put(), 
         new Post(security: "is_granted('ROLE_USER')") // Tout utilisateur peut créer sa propre entité
     ]
 )]

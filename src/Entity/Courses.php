@@ -14,11 +14,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Entity(repositoryClass: CoursesRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['pinCode'])]
 #[UniqueEntity(fields: ['pinCode'], message: 'This code is already used')]
-#[ApiResource(security: "is_granted('ROLE_USER')")]
-#[GetCollection(security: "is_granted('ROLE_USER')")]
-#[Get]
-#[Put]
-#[Post]
+#[ApiResource(
+    operations: [
+        new Get(), 
+        new Put(), 
+        new Post(security: "is_granted('ROLE_USER')") // Tout utilisateur peut créer sa propre entité
+    ]
+)]
 
 class Courses
 {
