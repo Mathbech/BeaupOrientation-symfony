@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\ApiResource\CoursesDesactivate;
+use App\Dto\CoursesDesactivateRequest;
 use App\Repository\CoursesRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -16,8 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity(fields: ['pinCode'], message: 'This code is already used')]
 #[ApiResource(
     operations: [
-        new Get(), 
-        new Put(), 
+        new Get(),
         new Post(security: "is_granted('ROLE_USER')") // Tout utilisateur peut créer sa propre entité
     ]
 )]

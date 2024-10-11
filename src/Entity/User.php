@@ -18,18 +18,19 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ApiResource(operations: [
+    new GetCollection(security: "is_granted('ROLE_ADMIN')"),
     new Post(
         uriTemplate: '/register',
         controller: RegistrationController::class,
         input: RegisterRequest::class,
         output: User::class,
         validate: true
-    )
+    ),
+    new Get(), 
+    new Put(),
+    
 ]
 )]
-#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
-#[Get]
-#[Put]
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]

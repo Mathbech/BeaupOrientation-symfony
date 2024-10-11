@@ -13,11 +13,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SchoolsRepository::class)]
-#[ApiResource(security: "is_granted('ROLE_USER')")]
-#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
-#[Get]
-#[Put]
-#[Post]
+#[ApiResource(operations: [
+    new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+    new Get(), 
+    new Put(),
+    new Post(security: "is_granted('ROLE_USER')") // Tout utilisateur peut créer sa propre entité
+    
+]
+)]
 class Schools
 {
     public function __toString()
