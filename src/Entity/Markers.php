@@ -3,11 +3,22 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\MarkersRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MarkersRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(), 
+        new Put(), 
+        new Post(security: "is_granted('ROLE_USER')") // Tout utilisateur peut créer sa propre entité
+    ]
+)]
+
 class Markers
 {
     #[ORM\Id]

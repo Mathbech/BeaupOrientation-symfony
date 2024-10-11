@@ -1,51 +1,72 @@
-# Symfony Docker
+# Beaup'Orientation
 
-A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework,
-with [FrankenPHP](https://frankenphp.dev) and [Caddy](https://caddyserver.com/) inside!
+Bienvenue sur le projet **Beaup'Orientation**.
 
-![CI](https://github.com/dunglas/symfony-docker/workflows/CI/badge.svg)
+## Description
 
-## Getting Started
+Beaup'Orientation est une application Symfony conçue pour suivre les courreur en course d'orientation. Elle utilise Docker pour l'environnement de développement et de production.
 
-1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
-2. Run `docker compose build --no-cache` to build fresh images
-3. Run `docker compose up --pull always -d --wait` to set up and start a fresh Symfony project
-4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+## Lien de gestion de projet
 
-## Features
+Vous pouvez suivre la gestion du projet sur Trello : [Lien Trello](https://trello.com/b/qlucubGq)
+Vous pouvez également visionner les maquettes et wireframe sur figma: [Lien Figma](https://www.figma.com/design/v70S8t0TYmwUVtUorvxdQ0/Projet-beauporientation?node-id=57-33&t=F7zuzqPqAqpOQWLo-1)
 
-* Production, development and CI ready
-* Just 1 service by default
-* Blazing-fast performance thanks to [the worker mode of FrankenPHP](https://github.com/dunglas/frankenphp/blob/main/docs/worker.md) (automatically enabled in prod mode)
-* [Installation of extra Docker Compose services](docs/extra-services.md) with Symfony Flex
-* Automatic HTTPS (in dev and prod)
-* HTTP/3 and [Early Hints](https://symfony.com/blog/new-in-symfony-6-3-early-hints) support
-* Real-time messaging thanks to a built-in [Mercure hub](https://symfony.com/doc/current/mercure.html)
-* [Vulcain](https://vulcain.rocks) support
-* Native [XDebug](docs/xdebug.md) integration
-* Super-readable configuration
+Vous pouvez visualiser le diagram de la BDD sur le document PDF : [Lien PDF](https://drive.google.com/file/d/1ZxLKimm8CNrI-1cPsFqQFFyRNQMh-bZ5/view?usp=sharing)
 
-**Enjoy!**
+## Prérequis
 
-## Docs
+- Docker
+- Docker Compose
+- PHP 8.3 ou supérieur
 
-1. [Options available](docs/options.md)
-2. [Using Symfony Docker with an existing project](docs/existing-project.md)
-3. [Support for extra services](docs/extra-services.md)
-4. [Deploying in production](docs/production.md)
-5. [Debugging with Xdebug](docs/xdebug.md)
-6. [TLS Certificates](docs/tls.md)
-7. [Using MySQL instead of PostgreSQL](docs/mysql.md)
-8. [Using Alpine Linux instead of Debian](docs/alpine.md)
-9. [Using a Makefile](docs/makefile.md)
-10. [Updating the template](docs/updating.md)
-11. [Troubleshooting](docs/troubleshooting.md)
+## Installation
 
-## License
+1. Clonez le dépôt :
 
-Symfony Docker is available under the MIT License.
+    ```sh
+    git clone https://github.com/votre-utilisateur/votre-repo.git
+    cd votre-repo
+    ```
 
-## Credits
+2. Copiez les fichiers d'environnement :
 
-Created by [Kévin Dunglas](https://dunglas.dev), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+    ```sh
+    cp .env .env.local
+    ```
+
+3. Construisez les images Docker :
+
+    ```sh
+    docker compose build --no-cache --pull
+    ```
+
+4. Démarrez les conteneurs :
+
+    ```sh
+    docker compose up -d
+    ```
+
+5. Accédez à l'application :
+
+    ```sh
+    https://localhost
+    ```
+
+## Configuration
+    Générer les clé pulic et privés pour l'utilisation de JWT token: 
+    ``` sh
+     php bin/console lexik:jwt:generate-keypair
+    ```
+
+## Connexion à l'api
+    Url de connexion 
+    ``` sh
+    https://localhost/auth
+    ```
+
+## Accès aux ressources
+    Url 
+    ```sh
+    https://localhost/api/{entité}
+    ```
+    

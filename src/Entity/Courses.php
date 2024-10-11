@@ -3,6 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\CoursesRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -10,7 +14,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Entity(repositoryClass: CoursesRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['pinCode'])]
 #[UniqueEntity(fields: ['pinCode'], message: 'This code is already used')]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Post(security: "is_granted('ROLE_USER')") // Tout utilisateur peut créer sa propre entité
+    ]
+)]
+
 class Courses
 {
 
