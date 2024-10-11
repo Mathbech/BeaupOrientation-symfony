@@ -30,7 +30,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[Get]
 #[Put]
-#[Post]
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]

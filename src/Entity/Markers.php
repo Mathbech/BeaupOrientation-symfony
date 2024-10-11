@@ -11,11 +11,14 @@ use App\Repository\MarkersRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MarkersRepository::class)]
-#[ApiResource]
-#[GetCollection(security: "object.getTeacher() == user")] // Accessible à tous les utilisateurs connectés
-#[Get(security: "object.getTeacher() == user")] // Accessible uniquement au propriétaire
-#[Put(security: "object.getTeacher() == user")] // Modifiable uniquement par le propriétaire
-#[Post(security: "is_granted('ROLE_USER')")] // Seuls les utilisateurs authentifiés peuvent créer des marqueurs
+#[ApiResource(
+    operations: [
+        new GetCollection(security: "is_granted('ROLE_USER')"), // Filtrage via un filtre Doctrine ou service personnalisé
+        new Get(security: "is_granted('ROLE_USER') and object.getTeacher() == user"), // Seul le propriétaire accède à l'élément spécifique
+        new Put(security: "is_granted('ROLE_USER') and object.getTeacher() == user"), // Seul le propriétaire peut modifier
+        new Post(security: "is_granted('ROLE_USER')") // Tout utilisateur peut créer sa propre entité
+    ]
+)]
 
 class Markers
 {
