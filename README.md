@@ -54,19 +54,22 @@ Vous pouvez visualiser le diagram de la BDD sur le document PDF : [Lien PDF](htt
     ```
 
 ## Configuration
-    Générer les clé pulic et privés pour l'utilisation de JWT token: 
-    ``` sh
+
+1. Générer les clé pulic et privés pour l'utilisation de JWT token: 
+    ```sh
      php bin/console lexik:jwt:generate-keypair
     ```
 
 ## Connexion à l'api
-    Url de connexion 
-    ``` sh
+
+2. Url de connexion 
+    ```sh
     https://localhost/auth
     ```
 
 ## Accès aux ressources
-    Url 
+
+1. Url 
     ```sh
     https://localhost/api/{entité}
     ```
