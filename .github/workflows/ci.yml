@@ -1,75 +1,102 @@
-name: CI
+name: Beaup'orientation CI
 
 on:
   push:
-    branches:
-      - main
-  pull_request: 
-    branches:
-      - dev
-  workflow_dispatch: ~
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
+    branches: [ dev, preprod, prod ]
+  pull_request:
+    branches: [ dev, preprod, prod ]
 
 jobs:
-  tests:
-    name: Tests
+  ci:
+    name: Build & Tests
     runs-on: ubuntu-latest
+    env:
+      APP_ENV: 'test'
+      APP_ENV_NAME: 'test'
+      APP_DEBUG: 1
+      APP_SECRET: '$ecretf0rt3st'
+      SYMFONY_DEPRECATIONS_HELPER: disabled
+      SENDER_EMAIL_ADDRESS: 'no-reply@beauporientation.fr'
+      DATABASE_URL: 'mysql://app:password@127.0.0.1:3318/app'
+      JWT_PASSPHRASE: 'NRyT23bmBpvnjKQL'
+      JWT_TOKEN_TTL: 31536000
+      JWT_SECRET_KEY: "%kernel.project_dir%/config/jwt/private.pem"
+      JWT_PUBLIC_KEY: "%kernel.project_dir%/config/jwt/public.pem"
+      BASE_URL: ''
+      MAILER_DSN: 'null://null'
+      MAILER_DSN_AWS_SES: 'null://null'
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: app_test
+          MYSQL_USER: app
+          MYSQL_PASSWORD: password
+          TZ: Europe/Paris
+        ports:
+          - 3318:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v4
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      -
-        name: Build Docker images
-        uses: docker/bake-action@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          pull: true
-          load: true
-          files: |
-            compose.yaml
-            compose.override.yaml
-          set: |
-            *.cache-from=type=gha,scope=${{github.ref}}
-            *.cache-from=type=gha,scope=refs/heads/main
-            *.cache-to=type=gha,scope=${{github.ref}},mode=max
-      -
-        name: Start services
-        run: docker compose up --wait --no-build
-      -
-        name: Check HTTP reachability
-        run: curl -v --fail-with-body http://localhost
-      -
-        name: Check HTTPS reachability
-        if: false # Remove this line when the homepage will be configured, or change the path to check
-        run: curl -vk --fail-with-body https://localhost
-      -
-        name: Create test database
-        if: false # Remove this line if Doctrine ORM is installed
-        run: docker compose exec -T php bin/console -e test doctrine:database:create
-      -
-        name: Run migrations
-        if: false # Remove this line if Doctrine Migrations is installed
-        run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
-      -
-        name: Run PHPUnit
-        if: false # Remove this line if PHPUnit is installed
-        run: docker compose exec -T php bin/phpunit
-      -
-        name: Doctrine Schema Validator
-        if: false # Remove this line if Doctrine ORM is installed
-        run: docker compose exec -T php bin/console -e test doctrine:schema:validate
-  lint:
-    name: Docker Lint
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-      -
-        name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
+          php-version: 8.3
+          extensions: composer:v2, flex, pcov, ssh2
+          coverage: pcov
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install vendors
+        run: composer install --no-progress --ansi --no-scripts
+
+      - name: Validate composer
+        run: composer validate --no-check-lock
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Cache node_modules
+        id: node-cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('./.package-lock.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # - name: Npm Install
+      #   run: npm install
+
+      # - name: Npm Build
+      #   run: npm run build
+
+      # - name: Run PHPUnit tests
+      #   run: composer test-with-coverage
+
+      # - name: Monitor coverage
+      #   uses: slavcodev/coverage-monitor-action@v1
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     coverage_path: "tests/coverage.xml"
+      #     threshold_alert: 60
+      #     threshold_warning: 80
+      #     threshold_metric: "lines"
