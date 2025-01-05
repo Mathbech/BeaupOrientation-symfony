@@ -83,11 +83,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Npm Install
-        run: npm install
+      # - name: Npm Install
+      #   run: npm install
 
-      - name: Npm Build
-        run: npm run build
+      # - name: Npm Build
+      #   run: npm run build
 
       # - name: Run PHPUnit tests
       #   run: composer test-with-coverage
