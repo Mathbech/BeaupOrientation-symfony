@@ -39,9 +39,16 @@ class Parcours
     #[ORM\ManyToMany(targetEntity: Markers::class, mappedBy: 'parcours')]
     private Collection $markers;
 
+    /**
+     * @var Collection<int, Courses>
+     */
+    #[ORM\OneToMany(targetEntity: Courses::class, mappedBy: 'parcours')]
+    private Collection $courses;
+
     public function __construct()
     {
         $this->markers = new ArrayCollection();
+        $this->courses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,7 +128,7 @@ class Parcours
     {
         if (!$this->markers->contains($marker)) {
             $this->markers->add($marker);
-            $marker->addParcour($this);
+            $marker->addParcours($this);
         }
 
         return $this;
@@ -131,6 +138,36 @@ class Parcours
     {
         if ($this->markers->removeElement($marker)) {
             $marker->removeParcour($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Courses>
+     */
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
+
+    public function addCourse(Courses $course): static
+    {
+        if (!$this->courses->contains($course)) {
+            $this->courses->add($course);
+            $course->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCourse(Courses $course): static
+    {
+        if ($this->courses->removeElement($course)) {
+            // set the owning side to null (unless already changed)
+            if ($course->getParcours() === $this) {
+                $course->setParcours(null);
+            }
         }
 
         return $this;
