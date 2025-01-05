@@ -26,9 +26,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
         output: User::class,
         validate: true
     ),
-    new Get(), 
+    new Get(),
     new Put(),
-    
+
 ]
 )]
 
@@ -75,12 +75,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $active = null;
 
-    /**
-     * @var Collection<int, Courses>
-     */
-    #[ORM\OneToMany(targetEntity: Courses::class, mappedBy: 'user')]
-    private Collection $courses;
-
     #[ORM\ManyToOne(inversedBy: 'teachers')]
     private ?Schools $schools = null;
 
@@ -90,12 +84,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Markers::class, mappedBy: 'teacher')]
     private Collection $markers;
 
+    /**
+     * @var Collection<int, Courses>
+     */
+    #[ORM\OneToMany(targetEntity: Courses::class, mappedBy: 'user')]
+    private Collection $courses;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->active = true;
-        $this->courses = new ArrayCollection();
         $this->markers = new ArrayCollection();
     }
 
@@ -222,36 +221,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Courses>
-     */
-    public function getCourses(): Collection
-    {
-        return $this->courses;
-    }
-
-    public function addCourse(Courses $course): static
-    {
-        if (!$this->courses->contains($course)) {
-            $this->courses->add($course);
-            $course->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCourse(Courses $course): static
-    {
-        if ($this->courses->removeElement($course)) {
-            // set the owning side to null (unless already changed)
-            if ($course->getUser() === $this) {
-                $course->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getSchools(): ?Schools
     {
         return $this->schools;
@@ -288,6 +257,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($marker->getTeacher() === $this) {
                 $marker->setTeacher(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Courses>
+     */
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
+
+    public function addCourse(Courses $course): static
+    {
+        if (!$this->courses->contains($course)) {
+            $this->courses->add($course);
+            $course->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCourse(Courses $course): static
+    {
+        if ($this->courses->removeElement($course)) {
+            // set the owning side to null (unless already changed)
+            if ($course->getUser() === $this) {
+                $course->setUser(null);
             }
         }
 
