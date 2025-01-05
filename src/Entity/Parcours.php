@@ -36,7 +36,7 @@ class Parcours
     /**
      * @var Collection<int, Marker>
      */
-    #[ORM\ManyToMany(targetEntity: Marker::class, mappedBy: 'parcours')]
+    #[ORM\ManyToMany(targetEntity: Markers::class, mappedBy: 'parcours')]
     private Collection $markers;
 
     public function __construct()
@@ -117,7 +117,7 @@ class Parcours
         return $this->markers;
     }
 
-    public function addMarker(Marker $marker): static
+    public function addMarker(Markers $marker): static
     {
         if (!$this->markers->contains($marker)) {
             $this->markers->add($marker);
@@ -127,7 +127,7 @@ class Parcours
         return $this;
     }
 
-    public function removeMarker(Marker $marker): static
+    public function removeMarker(Markers $marker): static
     {
         if ($this->markers->removeElement($marker)) {
             $marker->removeParcour($this);
