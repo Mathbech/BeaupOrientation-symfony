@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Security;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
@@ -35,7 +35,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('admin');
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('Security/registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
     }
