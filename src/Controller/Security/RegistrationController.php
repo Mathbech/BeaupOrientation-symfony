@@ -3,7 +3,9 @@
 namespace App\Controller\Security;
 
 use App\Entity\User;
+use App\Entity\Schools;
 use App\Form\RegistrationFormType;
+use App\Form\SchoolFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +16,19 @@ use Symfony\Component\Routing\Attribute\Route;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register_step_1')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function registerStep1(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $school = new Schools();
+        $form = $this->createForm(SchoolFormType::class, $school);
+
+        return $this->render('Security/registration/register_step_1.html.twig', [
+            'registrationFormStep1' => $form,
+        ]);
+    }
+
+
+    #[Route('/register/your-credentials', name: 'app_register_step_2')]
+    public function register_step_2(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -35,7 +49,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('admin');
         }
 
-        return $this->render('Security/registration/register.html.twig', [
+        return $this->render('Security/registration/register_step_2.html.twig', [
             'registrationForm' => $form,
         ]);
     }

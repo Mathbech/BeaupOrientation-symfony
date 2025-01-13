@@ -1,0 +1,19 @@
+schoolName: Nom de l'école
+city: Ville
+zipCode: Code postal
+address: Adresse
+country: Pays
+
+placeHolder:
+  schoolName: Entrez le nom de l'école
+  city: Entrez la ville
+  zipCode: Entrez le code postal
+  address: Entrez l'adresse
+  country: Entrez le pays
+
+validator:
+  required: Ce champ est obligatoire
+  email: Entrez une adresse email valide
+  zipCode: Entrez un code postal valide
+  country: Entrez un pays valide
+  notBlank: Ce champ ne peut pas être vide
