@@ -30,24 +30,23 @@ class Parcours
     #[ORM\Column]
     private ?bool $active = null;
 
-    #[ORM\ManyToOne(inversedBy: 'parcours')]
-    private ?User $user = null;
-
-    /**
-     * @var Collection<int, Marker>
-     */
-    #[ORM\ManyToMany(targetEntity: Markers::class, mappedBy: 'parcours')]
-    private Collection $markers;
-
     /**
      * @var Collection<int, Courses>
      */
     #[ORM\OneToMany(targetEntity: Courses::class, mappedBy: 'parcours')]
     private Collection $courses;
 
+    /**
+     * @var Collection<int, Markers>
+     */
+    #[ORM\ManyToMany(targetEntity: Markers::class, inversedBy: 'parcours')]
+    private Collection $markers;
+
+    #[ORM\ManyToOne(inversedBy: 'parcours')]
+    private ?User $user = null;
+
     public function __construct()
     {
-        $this->markers = new ArrayCollection();
         $this->courses = new ArrayCollection();
     }
 
@@ -104,45 +103,6 @@ class Parcours
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Marker>
-     */
-    public function getMarkers(): Collection
-    {
-        return $this->markers;
-    }
-
-    public function addMarker(Markers $marker): static
-    {
-        if (!$this->markers->contains($marker)) {
-            $this->markers->add($marker);
-            $marker->addParcours($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMarker(Markers $marker): static
-    {
-        if ($this->markers->removeElement($marker)) {
-            $marker->removeParcour($this);
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Courses>
      */
@@ -169,6 +129,42 @@ class Parcours
                 $course->setParcours(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Markers>
+     */
+    public function getMarkers(): Collection
+    {
+        return $this->markers;
+    }
+
+    public function addMarker(Markers $marker): static
+    {
+        if (!$this->markers->contains($marker)) {
+            $this->markers->add($marker);
+        }
+
+        return $this;
+    }
+
+    public function removeMarker(Markers $marker): static
+    {
+        $this->markers->removeElement($marker);
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

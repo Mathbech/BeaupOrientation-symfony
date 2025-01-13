@@ -8,6 +8,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\MarkersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MarkersRepository::class)]
@@ -52,6 +54,17 @@ class Markers
 
     #[ORM\ManyToOne(inversedBy: 'markers')]
     private ?User $teacher = null;
+
+    /**
+     * @var Collection<int, Parcours>
+     */
+    #[ORM\ManyToMany(targetEntity: Parcours::class, mappedBy: 'markers')]
+    private Collection $parcours;
+
+    public function __construct()
+    {
+        $this->parcours = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -162,6 +175,33 @@ class Markers
     public function setTeacher(?User $teacher): static
     {
         $this->teacher = $teacher;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Parcours>
+     */
+    public function getParcours(): Collection
+    {
+        return $this->parcours;
+    }
+
+    public function addParcour(Parcours $parcour): static
+    {
+        if (!$this->parcours->contains($parcour)) {
+            $this->parcours->add($parcour);
+            $parcour->addMarker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParcour(Parcours $parcour): static
+    {
+        if ($this->parcours->removeElement($parcour)) {
+            $parcour->removeMarker($this);
+        }
 
         return $this;
     }
