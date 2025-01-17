@@ -24,6 +24,9 @@ class Runners
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
+    #[ORM\Column]
+    private ?bool $isTeacher = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +64,18 @@ class Runners
     public function setCode(string $code): static
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function isTeacher(): ?bool
+    {
+        return $this->isTeacher;
+    }
+
+    public function setTeacher(bool $isTeacher): static
+    {
+        $this->isTeacher = $isTeacher;
 
         return $this;
     }
