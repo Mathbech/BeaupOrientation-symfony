@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RunnersRepository;
+use ApiPlatform\Metadata\Post;
 use App\Dto\RunnerLoginInput;
 use App\ApiResource\RunnerLoginController;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,13 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: RunnersRepository::class)]
 #[ApiResource(
     operations: [
-        new \ApiPlatform\Metadata\Post(
+        new Post(
             uriTemplate: '/runners/login',
             controller: RunnerLoginController::class,
             input: RunnerLoginInput::class,
-            output: Runners::class,
-            deserialize: true, // Désérialisation activée
-            name: 'runner_login'
+            output: false,
         )
     ]
 )]
