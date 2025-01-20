@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Repository\RunnersRepository;
 use ApiPlatform\Metadata\Post;
 use App\Dto\RunnerLoginInput;
@@ -17,7 +18,10 @@ use Doctrine\ORM\Mapping as ORM;
             controller: RunnerLoginController::class,
             input: RunnerLoginInput::class,
             output: false,
-        )
+        ),
+        new Get(
+            uriTemplate: '/runners/{id}',
+        ),
     ]
 )]
 class Runners

@@ -31,6 +31,7 @@ class RunnerLoginController extends AbstractController
         // Retour des informations du runner
         return new JsonResponse([
             'id' => $runner->getId(),
+            'course' => $runner->getCourse()->getName(),
             'name' => $runner->getName(),
             'isTeacher' => $runner->isTeacher(),
         ]);
