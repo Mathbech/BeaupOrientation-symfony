@@ -15,10 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SchoolsRepository::class)]
 #[ApiResource(operations: [
     new GetCollection(security: "is_granted('ROLE_ADMIN')"),
-    new Get(), 
+    new Get(),
     new Put(),
     new Post(security: "is_granted('ROLE_USER')") // Tout utilisateur peut créer sa propre entité
-    
+
 ]
 )]
 class Schools
@@ -65,6 +65,8 @@ class Schools
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

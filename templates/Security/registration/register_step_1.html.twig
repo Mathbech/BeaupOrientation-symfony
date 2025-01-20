@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register Your school{% endblock %}
+
+{% block body %}
+    <h1>Register</h1>
+
+    {{ form_errors(registrationFormStep1) }}
+
+    {{ form_start(registrationFormStep1) }}
+        {{ form_row(registrationFormStep1.name) }}
+        {{ form_row(registrationFormStep1.city) }}
+        {{ form_row(registrationFormStep1.zipCode) }}
+        {{ form_row(registrationFormStep1.adress) }}
+        {{ form_row(registrationFormStep1.country) }}
+
+        <button type="submit" class="btn">Next</button>
+    {{ form_end(registrationFormStep1) }}
+
+{% endblock %}
