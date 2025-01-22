@@ -15,9 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MarkersRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(), 
-        new Put(), 
-        new Post(security: "is_granted('ROLE_USER')") // Tout utilisateur peut créer sa propre entité
+        new Get(),
+        new Put(),
+        new Post() // Tout utilisateur peut créer sa propre entité
     ]
 )]
 
@@ -46,7 +46,7 @@ class Markers
     #[ORM\Column(length: 255)]
     private ?string $country = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true, length: 255)]
     private ?string $qrCode = null;
 
     #[ORM\Column(nullable: true)]
