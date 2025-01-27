@@ -34,6 +34,7 @@ class RunnerLoginController extends AbstractController
             'course' => $runner->getCourse()->getName(),
             'name' => $runner->getName(),
             'isTeacher' => $runner->isTeacher(),
+            'teacherId' => $runner->getTeacherId() ? $runner->getTeacherId()->getId() : null,
         ]);
     }
 }

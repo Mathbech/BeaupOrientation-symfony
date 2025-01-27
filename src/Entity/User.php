@@ -96,6 +96,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Parcours::class, mappedBy: 'user')]
     private Collection $parcours;
 
+    /**
+     * @var Collection<int, Runners>
+     */
+    #[ORM\OneToMany(targetEntity: Runners::class, mappedBy: 'teacherId')]
+    private Collection $runners;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -103,6 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->active = true;
         $this->markers = new ArrayCollection();
         $this->parcours = new ArrayCollection();
+        $this->runners = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -324,6 +331,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($parcour->getUser() === $this) {
                 $parcour->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Runners>
+     */
+    public function getRunners(): Collection
+    {
+        return $this->runners;
+    }
+
+    public function addRunner(Runners $runner): static
+    {
+        if (!$this->runners->contains($runner)) {
+            $this->runners->add($runner);
+            $runner->setTeacherId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRunner(Runners $runner): static
+    {
+        if ($this->runners->removeElement($runner)) {
+            // set the owning side to null (unless already changed)
+            if ($runner->getTeacherId() === $this) {
+                $runner->setTeacherId(null);
             }
         }
 

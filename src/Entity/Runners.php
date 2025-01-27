@@ -43,6 +43,9 @@ class Runners
     #[ORM\Column]
     private ?bool $isTeacher = null;
 
+    #[ORM\ManyToOne(inversedBy: 'runners')]
+    private ?User $teacherId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,6 +95,18 @@ class Runners
     public function setTeacher(bool $isTeacher): static
     {
         $this->isTeacher = $isTeacher;
+
+        return $this;
+    }
+
+    public function getTeacherId(): ?User
+    {
+        return $this->teacherId;
+    }
+
+    public function setTeacherId(?User $teacherId): static
+    {
+        $this->teacherId = $teacherId;
 
         return $this;
     }
