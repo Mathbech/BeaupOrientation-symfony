@@ -18,7 +18,8 @@ use LongitudeOne\Spatial\PHP\Types\SpatialInterface;
     operations: [
         new Get(),
         new Put(),
-        new Post() // Tout utilisateur peut créer sa propre entité
+        new Post(),
+        new GetCollection()
     ]
 )]
 
