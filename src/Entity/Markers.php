@@ -11,6 +11,7 @@ use App\Repository\MarkersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use LongitudeOne\Spatial\PHP\Types\SpatialInterface;
 
 #[ORM\Entity(repositoryClass: MarkersRepository::class)]
 #[ApiResource(
@@ -34,16 +35,16 @@ class Markers
     #[ORM\Column(length: 255)]
     private ?string $longitude = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true, length: 255)]
     private ?string $city = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true, length: 255)]
     private ?string $address = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true, length: 255)]
     private ?string $zipCode = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true, length: 255)]
     private ?string $country = null;
 
     #[ORM\Column(nullable: true, length: 255)]
@@ -60,6 +61,9 @@ class Markers
      */
     #[ORM\ManyToMany(targetEntity: Parcours::class, mappedBy: 'markers')]
     private Collection $parcours;
+
+    #[ORM\Column(type: 'geometry_point', nullable: true)]
+    private ?SpatialInterface $point = null;
 
     public function __construct()
     {
@@ -202,6 +206,22 @@ class Markers
         if ($this->parcours->removeElement($parcour)) {
             $parcour->removeMarker($this);
         }
+
+        return $this;
+    }
+
+    public function getPoint(): ?SpatialInterface
+    {
+        return $this->point;
+    }
+
+    public function setPoint(?SpatialInterface $point): static
+    {
+        if ($point !== null) {
+            $point->setSrid(4326); // ✅ Définir le SRID à 4326
+        }
+
+        $this->point = $point;
 
         return $this;
     }
