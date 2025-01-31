@@ -29,3 +29,5 @@
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 /logstash/*
+
+/node_modules/
