@@ -3,11 +3,27 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Repository\RunnersRepository;
+use ApiPlatform\Metadata\Post;
+use App\Dto\RunnerLoginInput;
+use App\ApiResource\RunnerLoginController;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RunnersRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Post(
+            uriTemplate: '/runners/login',
+            controller: RunnerLoginController::class,
+            input: RunnerLoginInput::class,
+            output: false,
+        ),
+        new Get(
+            uriTemplate: '/runners/{id}',
+        ),
+    ]
+)]
 class Runners
 {
     #[ORM\Id]
@@ -26,6 +42,9 @@ class Runners
 
     #[ORM\Column]
     private ?bool $isTeacher = null;
+
+    #[ORM\ManyToOne(inversedBy: 'runners')]
+    private ?User $teacherId = null;
 
     public function getId(): ?int
     {
@@ -76,6 +95,18 @@ class Runners
     public function setTeacher(bool $isTeacher): static
     {
         $this->isTeacher = $isTeacher;
+
+        return $this;
+    }
+
+    public function getTeacherId(): ?User
+    {
+        return $this->teacherId;
+    }
+
+    public function setTeacherId(?User $teacherId): static
+    {
+        $this->teacherId = $teacherId;
 
         return $this;
     }

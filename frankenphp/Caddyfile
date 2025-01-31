@@ -8,7 +8,8 @@
 
 {$CADDY_EXTRA_CONFIG}
 
-{$SERVER_NAME:localhost} {
+# Écoute sur toutes les adresses IP pour le port 80
+:80 {
 	log {
 		# Redact the authorization query parameter that can be set by Mercure
 		format filter {
