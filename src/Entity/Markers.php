@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\MarkersRepository;
+use App\State\MarkersProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +20,10 @@ use LongitudeOne\Spatial\PHP\Types\SpatialInterface;
         new Get(),
         new Put(),
         new Post(),
-        new GetCollection()
+        new GetCollection(
+            uriTemplate: '/markers/display/all',
+            provider: MarkersProvider::class
+        )
     ]
 )]
 
