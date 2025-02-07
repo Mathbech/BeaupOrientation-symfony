@@ -87,6 +87,9 @@ class TeacherController extends AbstractController
         if ($forms->isSubmitted() && $forms->isValid()) {
             $parcours = $forms->getData();
             $parcours->setUser($this->getUser());
+            $parcours->setCreatedAt(new \DateTime());
+            $parcours->setUpdatedAt(new \DateTime());
+            $parcours->setActive(true);
             $em->persist($parcours);
             $em->flush();
             return $this->redirectToRoute('teacher_parcours');
