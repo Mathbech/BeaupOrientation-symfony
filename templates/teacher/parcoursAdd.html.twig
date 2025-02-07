@@ -15,6 +15,7 @@
 							<h3 class="card-title">Ajouter une course</h3>
 						</div>
 						{{ form_start(form) }}
+                        {{ form_errors(form) }}
 						<div class="card-body">
 							<div class="form-group">
 								{{ form_label(form.name) }}
@@ -24,6 +25,7 @@
 								{{ form_label(form.markers) }}
 								{{ form_widget(form.markers) }}
 							</div> #}
+                           {{ form_rest(form) }}
 						</div>
 						<!-- /.card-body -->
 
