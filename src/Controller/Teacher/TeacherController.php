@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Courses;
 use App\Entity\Parcours;
 use App\Form\CourseAddFormType;
+use App\Form\ParcoursAddFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -71,6 +72,27 @@ class TeacherController extends AbstractController
         }
 
         return $this->render('teacher/courseAdd.html.twig', [
+            'form' => $forms->createView(),
+        ]);
+    }
+
+    #[Route('/parcours/add', name: 'teacher_parcours_add')]
+    public function parcoursAdd(EntityManagerInterface $em, Request $request): Response
+    {
+        $newParcours = new Courses();
+
+        $forms = $this->createForm(ParcoursAddFormType::class);
+        $forms->handleRequest($request);
+
+        if ($forms->isSubmitted() && $forms->isValid()) {
+            $parcours = $forms->getData();
+            $parcours->setUser($this->getUser());
+            $em->persist($parcours);
+            $em->flush();
+            return $this->redirectToRoute('teacher_parcours');
+        }
+
+        return $this->render('teacher/parcoursAdd.html.twig', [
             'form' => $forms->createView(),
         ]);
     }
