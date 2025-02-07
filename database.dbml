@@ -1,0 +1,135 @@
+Table "courses" {
+  "id" int [pk, not null, increment]
+  "parcours_id" int
+  "user_id" int
+  "name" varchar(255) [not null]
+
+  Indexes {
+    parcours_id [type: btree, name: "IDX_A9A55A4C6E38C0DB"]
+    user_id [type: btree, name: "IDX_A9A55A4CA76ED395"]
+  }
+}
+
+Table "doctrine_migration_versions" {
+  "version" varchar(191) [pk, not null]
+  "executed_at" datetime
+  "execution_time" int
+}
+
+Table "markers" {
+  "id" int [pk, not null, increment]
+  "teacher_id" int
+  "latitude" varchar(255) [not null]
+  "longitude" varchar(255) [not null]
+  "city" varchar(255)
+  "address" varchar(255)
+  "zip_code" varchar(255)
+  "country" varchar(255)
+  "qr_code" varchar(255)
+  "deleting" datetime [note: '(DC2Type:datetime_immutable)']
+  "point" point [note: '(DC2Type:geometry_point)']
+
+  Indexes {
+    teacher_id [type: btree, name: "IDX_4189DF3041807E1D"]
+  }
+}
+
+Table "messenger_messages" {
+  "id" bigint [pk, not null, increment]
+  "body" longtext [not null]
+  "headers" longtext [not null]
+  "queue_name" varchar(190) [not null]
+  "created_at" datetime [not null, note: '(DC2Type:datetime_immutable)']
+  "available_at" datetime [not null, note: '(DC2Type:datetime_immutable)']
+  "delivered_at" datetime [note: '(DC2Type:datetime_immutable)']
+
+  Indexes {
+    delivered_at [type: btree, name: "IDX_75EA56E016BA31DB"]
+    available_at [type: btree, name: "IDX_75EA56E0E3BD61CE"]
+    queue_name [type: btree, name: "IDX_75EA56E0FB7336F0"]
+  }
+}
+
+Table "parcours" {
+  "id" int [pk, not null, increment]
+  "user_id" int
+  "name" varchar(255) [not null]
+  "created_at" datetime [not null]
+  "updated_at" datetime [not null]
+  "active" tinyint(1) [not null]
+
+  Indexes {
+    user_id [type: btree, name: "IDX_99B1DEE3A76ED395"]
+  }
+}
+
+Table "parcours_markers" {
+  "parcours_id" int [not null]
+  "markers_id" int [not null]
+
+  Indexes {
+    parcours_id [type: btree, name: "IDX_CEE2E1666E38C0DB"]
+    markers_id [type: btree, name: "IDX_CEE2E166D0EEC2B5"]
+    (parcours_id, markers_id) [pk, name: "PRIMARY"]
+  }
+}
+
+Table "runners" {
+  "id" int [pk, not null, increment]
+  "course_id" int
+  "name" varchar(255) [not null]
+  "code" varchar(255) [not null]
+  "is_teacher" tinyint(1) [not null]
+  "teacher_id_id" int
+
+  Indexes {
+    teacher_id_id [type: btree, name: "IDX_DA96F92B2EBB220A"]
+    course_id [type: btree, name: "IDX_DA96F92B591CC992"]
+  }
+}
+
+Table "schools" {
+  "id" int [pk, not null, increment]
+  "name" varchar(255) [not null]
+  "city" varchar(255) [not null]
+  "zip_code" varchar(255) [not null]
+  "adress" varchar(255) [not null]
+  "country" varchar(255) [not null]
+  "created_at" datetime [not null, note: '(DC2Type:datetime_immutable)']
+  "updated_at" datetime [not null, note: '(DC2Type:datetime_immutable)']
+  "deleting" datetime [note: '(DC2Type:datetime_immutable)']
+}
+
+Table "user" {
+  "id" int [pk, not null, increment]
+  "schools_id" int
+  "email" varchar(180) [unique, not null]
+  "roles" json [not null]
+  "password" varchar(255) [not null]
+  "username" varchar(255) [not null]
+  "created_at" datetime [not null, note: '(DC2Type:datetime_immutable)']
+  "updated_at" datetime [not null, note: '(DC2Type:datetime_immutable)']
+  "active" tinyint(1) [not null]
+
+  Indexes {
+    schools_id [type: btree, name: "IDX_8D93D649A000581D"]
+  }
+}
+
+Ref "FK_A9A55A4C6E38C0DB":"parcours"."id" < "courses"."parcours_id"
+
+Ref "FK_A9A55A4CA76ED395":"user"."id" < "courses"."user_id"
+
+Ref "FK_4189DF3041807E1D":"user"."id" < "markers"."teacher_id"
+
+Ref "FK_99B1DEE3A76ED395":"user"."id" < "parcours"."user_id"
+
+Ref "FK_CEE2E1666E38C0DB":"parcours"."id" < "parcours_markers"."parcours_id" [delete: cascade]
+
+Ref "FK_CEE2E166D0EEC2B5":"markers"."id" < "parcours_markers"."markers_id" [delete: cascade]
+
+Ref "FK_DA96F92B2EBB220A":"user"."id" < "runners"."teacher_id_id"
+
+Ref "FK_DA96F92B591CC992":"courses"."id" < "runners"."course_id"
+
+Ref "FK_8D93D649A000581D":"schools"."id" < "user"."schools_id"
