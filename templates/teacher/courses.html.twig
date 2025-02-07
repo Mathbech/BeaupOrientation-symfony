@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% set has_navbar = true %}
+{% set has_footer = false %}
+
+
+{% block title %}{% endblock %}
+
+{% block body %}
+	<div class="container-fluid">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Courses</h3>
+			</div>
+			<!-- /.card-header -->
+			<div class="card-body">
+                <a href="{{ path('teacher_course_add') }}" class="btn btn-primary">Ajouter une course</a>
+				<table id="courses-table" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Nom</th>
+							<th>Parcours</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for courseData in coursesData %}
+							<tr>
+								<td>{{ courseData.Name }}</td>
+								<td>{{ courseData.parcours.name }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
