@@ -13,6 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Parcours
 {
+
+    public function __toString(): String{
+        return $this->getName();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% set has_navbar = true %}
+{% set has_footer = false %}
+
+
+{% block title %}{% endblock %}
+
+{% block body %}
+	<div class="container-fluid">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Parcours</h3>
+			</div>
+			<!-- /.card-header -->
+			<div class="card-body">
+                <a href="" class="btn btn-primary">Ajouter un parcours</a>
+				<table id="parcours-table" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Nom</th>
+							<th>Créé le</th>
+							<th>Actif</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for parcourData in parcoursData %}
+							<tr>
+								<td>{{ parcourData.Name }}</td>
+								<td>{{ parcourData.createdAt|date('d-m-Y') }}</td>
+								<td>{{ parcourData.active }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+{% endblock %}
