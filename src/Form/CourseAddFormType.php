@@ -17,10 +17,16 @@ class CourseAddFormType extends AbstractType
     {
         $user = $options['user'];
         $builder
-            ->add('name')
+            ->add('name', null, [
+                'label' => 'Nom de la course',
+                'attr' => ['placeholder' => 'Nom de la course',
+                    'class' => 'form-control'],
+            ])
             ->add('parcours', EntityType::class, [
+                'label' => 'Parcours',
                 'class' => Parcours::class,
                 'choice_label' => 'name',
+                'attr' => ['class' => 'form-control'],
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     return $er->createQueryBuilder('p')
                         ->where('p.user = :user')
