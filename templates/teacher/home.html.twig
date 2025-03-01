@@ -23,8 +23,8 @@
 					</thead>
 					<tbody>
 						{% for courseData in coursesData %}
-							<tr>
-								<td>{{ courseData.course_name }}</td>
+							<tr class="clickable-row" data-href="{{ path('teacher_course', {'id': courseData.id}) }}">
+								<td>{{ courseData.name }}</td>
 								<td>{{ courseData.runners }}</td>
                                 <td> {{ courseData.markers }} </td>
 							</tr>

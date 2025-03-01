@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Courses;
 // use App\Entity\Parcours;
 use App\Form\CourseAddFormType;
+use Symfony\Bundle\SecurityBundle\Security;
 // use App\Form\ParcoursAddFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,15 +17,19 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class TeacherController extends AbstractController
 {
+    private $user;
+    public function __construct(Security $security)
+    {
+        $this->user = $security->getUser()->getId();
+    }
     #[Route('/', name: 'teacher_home')]
     public function index(EntityManagerInterface $em): Response
     {
         $coursesData = [];
-        $user = $this->getUser()->getId();
         $coursesRepository = $em->getRepository(Courses::class);
         // $parcoursRepository = $em->getRepository(Parcours::class);
 
-        $coursesData = $coursesRepository->getCoursesByUser($user);
+        $coursesData = $coursesRepository->getCoursesByUser($this->user, 0);
         // $parcoursData = $parcoursRepository->findBy(['user' => $this->getUser()]);
         dump($coursesData);
         return $this->render('teacher/home.html.twig', [
@@ -33,11 +38,11 @@ class TeacherController extends AbstractController
         ]);
     }
 
-    #[Route('/courses', name: 'teacher_courses')]
-    public function courses(EntityManagerInterface $em): Response
+    #[Route('/courses/{id}', name: 'teacher_courses')]
+    public function courses(EntityManagerInterface $em, $id): Response
     {
         $coursesRepository = $em->getRepository(Courses::class);
-        $coursesData = $coursesRepository->findBy(['user' => $this->getUser()]);
+        $coursesData = $coursesRepository->getCoursesByUser($this->user, $id);
         return $this->render('teacher/courses.html.twig', [
             'coursesData' => $coursesData,
         ]);
@@ -53,23 +58,23 @@ class TeacherController extends AbstractController
     //     ]);
     // }
 
-    #[Route('/courses/add', name: 'teacher_course_add')]
+    #[Route('/course/add', name: 'teacher_course_add')]
     public function courseAdd(EntityManagerInterface $em, Request $request): Response
     {
         $newCourse = new Courses();
         $newCourse->setUser($this->getUser());
 
         $forms = $this->createForm(CourseAddFormType::class, $newCourse, [
-            'user' => $this->getUser()
+            'user' => $this->user
         ]);
         $forms->handleRequest($request);
 
         if ($forms->isSubmitted() && $forms->isValid()) {
             $course = $forms->getData();
-            $course->setUser($this->getUser());
+            $course->setUser($this->user);
             $em->persist($course);
             $em->flush();
-            return $this->redirectToRoute('teacher_courses');
+            return $this->redirectToRoute('teacher_home');
         }
 
         return $this->render('teacher/courseAdd.html.twig', [

@@ -36,8 +36,11 @@ doctrine:
                 st_distance: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StDistance
                 #A good practice is to prefix functions with ST when they are issue from the Standard directory
                 st_area: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StArea
+                st_x: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StX
+                st_y: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StY
+                st_asgeojson: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StAsGeoJson
             string_functions:
-                sp_asgeojson: LongitudeOne\Spatial\ORM\Query\AST\Functions\Postgresql\SpAsGeoJson
+                st_asgeojson: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StAsGeoJson
                 group_concat: DoctrineExtensions\Query\Mysql\GroupConcat
 
 when@test:
