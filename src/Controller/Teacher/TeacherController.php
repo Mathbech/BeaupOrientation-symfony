@@ -19,6 +19,7 @@ class TeacherController extends AbstractController
     #[Route('/', name: 'teacher_home')]
     public function index(EntityManagerInterface $em): Response
     {
+        $coursesData = [];
         $user = $this->getUser()->getId();
         $coursesRepository = $em->getRepository(Courses::class);
         // $parcoursRepository = $em->getRepository(Parcours::class);

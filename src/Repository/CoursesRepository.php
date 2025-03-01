@@ -25,8 +25,9 @@ class CoursesRepository extends ServiceEntityRepository
     public function getCoursesByUser($user)
     {
         return $this->createQueryBuilder('c')
-            ->select('c.id AS course_id, c.name AS course_name, GROUP_CONCAT(r.name) AS runners')
+            ->select('c.id AS course_id, c.name AS course_name, GROUP_CONCAT(r.name) AS runners, COUNT(m) AS markers')
             ->leftJoin('c.runners', 'r')
+            ->leftJoin('c.markers', 'm')
             ->where('c.user = :user')
             ->setParameter('user', $user)
             ->groupBy('c.id')

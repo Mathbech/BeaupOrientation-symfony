@@ -70,6 +70,9 @@ class Markers
     #[ORM\Column(type: 'geometry_point', nullable: true)]
     private ?SpatialInterface $point = null;
 
+    #[ORM\ManyToOne(inversedBy: 'markers')]
+    private ?Courses $courses = null;
+
     // public function __construct()
     // {
     //     $this->parcours = new ArrayCollection();
@@ -227,6 +230,18 @@ class Markers
         }
 
         $this->point = $point;
+
+        return $this;
+    }
+
+    public function getCourses(): ?Courses
+    {
+        return $this->courses;
+    }
+
+    public function setCourses(?Courses $courses): static
+    {
+        $this->courses = $courses;
 
         return $this;
     }
