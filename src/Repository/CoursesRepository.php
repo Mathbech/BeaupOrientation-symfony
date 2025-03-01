@@ -19,19 +19,27 @@ class CoursesRepository extends ServiceEntityRepository
     /**
      * Display courses by users
      *
-     * @return void
+     * @return array
      * @author Mathieu Bechade
      */
-    public function getCoursesByUser($user)
-    {
-        return $this->createQueryBuilder('c')
-            ->select('c.id AS course_id, c.name AS course_name, GROUP_CONCAT(r.name) AS runners, COUNT(m) AS markers')
+    public function getCoursesByUser(
+        ?string $user = null,
+        ?int $id = null
+    ): array {
+        $qb = $this->createQueryBuilder('c')
+            ->select('c.id, c.name, GROUP_CONCAT(r.name) AS runners, COUNT(m) AS markers, GROUP_CONCAT(DISTINCT CONCAT(ST_X(m.point), ST_Y(m.point))) AS point')
             ->leftJoin('c.runners', 'r')
             ->leftJoin('c.markers', 'm')
-            ->where('c.user = :user')
+            ->andWhere('c.user = :user')
             ->setParameter('user', $user)
-            ->groupBy('c.id')
-            ->getQuery()
+            ->groupBy('c.id');
+
+        if ($id !== null) {
+            $qb->andWhere('c.id = :id')
+                ->setParameter('id', $id);
+        }
+
+        return $qb->getQuery()
             ->getResult();
     }
 }
