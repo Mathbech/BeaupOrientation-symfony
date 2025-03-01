@@ -18,9 +18,9 @@ class SecurityController extends AbstractController
             if ($security->isGranted('ROLE_ADMIN')) {
                 // Redirigez vers la page d'administration
                 return $this->redirectToRoute('admin'); // Remplacez par votre route d'administration
-            } elseif ($security->isGranted('ROLE_USER')) {
+            } elseif ($security->isGranted('ROLE_TEACHER')) {
                 // Redirigez vers la page utilisateur
-                return $this->redirectToRoute('teacher_dashboard'); // Remplacez par votre route utilisateur
+                return $this->redirectToRoute('teacher_home'); // Remplacez par votre route utilisateur
             }
         }
 
