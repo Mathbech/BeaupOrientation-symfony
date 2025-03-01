@@ -5,9 +5,9 @@ namespace App\Controller\Teacher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Courses;
-use App\Entity\Parcours;
+// use App\Entity\Parcours;
 use App\Form\CourseAddFormType;
-use App\Form\ParcoursAddFormType;
+// use App\Form\ParcoursAddFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,16 +19,16 @@ class TeacherController extends AbstractController
     #[Route('/', name: 'teacher_home')]
     public function index(EntityManagerInterface $em): Response
     {
+        $user = $this->getUser()->getId();
         $coursesRepository = $em->getRepository(Courses::class);
-        $parcoursRepository = $em->getRepository(Parcours::class);
+        // $parcoursRepository = $em->getRepository(Parcours::class);
 
-        $coursesData = $coursesRepository->findBy(['user' => $this->getUser()]);
-        $parcoursData = $parcoursRepository->findBy(['user' => $this->getUser()]);
+        $coursesData = $coursesRepository->getCoursesByUser($user);
+        // $parcoursData = $parcoursRepository->findBy(['user' => $this->getUser()]);
         dump($coursesData);
-        dump($parcoursData);
         return $this->render('teacher/home.html.twig', [
             'coursesData' => $coursesData,
-            'parcoursData' => $parcoursData,
+            // 'parcoursData' => $parcoursData,
         ]);
     }
 
@@ -42,15 +42,15 @@ class TeacherController extends AbstractController
         ]);
     }
 
-    #[Route('/parcours', name: 'teacher_parcours')]
-    public function parcours(EntityManagerInterface $em): Response
-    {
-        $parcoursRepository = $em->getRepository(Parcours::class);
-        $parcoursData = $parcoursRepository->findBy(['user' => $this->getUser()]);
-        return $this->render('teacher/parcours.html.twig', [
-            'parcoursData' => $parcoursData,
-        ]);
-    }
+    // #[Route('/parcours', name: 'teacher_parcours')]
+    // public function parcours(EntityManagerInterface $em): Response
+    // {
+    //     $parcoursRepository = $em->getRepository(Parcours::class);
+    //     $parcoursData = $parcoursRepository->findBy(['user' => $this->getUser()]);
+    //     return $this->render('teacher/parcours.html.twig', [
+    //         'parcoursData' => $parcoursData,
+    //     ]);
+    // }
 
     #[Route('/courses/add', name: 'teacher_course_add')]
     public function courseAdd(EntityManagerInterface $em, Request $request): Response
@@ -76,27 +76,27 @@ class TeacherController extends AbstractController
         ]);
     }
 
-    #[Route('/parcours/add', name: 'teacher_parcours_add')]
-    public function parcoursAdd(EntityManagerInterface $em, Request $request): Response
-    {
-        $newParcours = new Courses();
+    // #[Route('/parcours/add', name: 'teacher_parcours_add')]
+    // public function parcoursAdd(EntityManagerInterface $em, Request $request): Response
+    // {
+    //     $newParcours = new Courses();
 
-        $forms = $this->createForm(ParcoursAddFormType::class);
-        $forms->handleRequest($request);
+    //     $forms = $this->createForm(ParcoursAddFormType::class);
+    //     $forms->handleRequest($request);
 
-        if ($forms->isSubmitted() && $forms->isValid()) {
-            $parcours = $forms->getData();
-            $parcours->setUser($this->getUser());
-            $parcours->setCreatedAt(new \DateTime());
-            $parcours->setUpdatedAt(new \DateTime());
-            $parcours->setActive(true);
-            $em->persist($parcours);
-            $em->flush();
-            return $this->redirectToRoute('teacher_parcours');
-        }
+    //     if ($forms->isSubmitted() && $forms->isValid()) {
+    //         $parcours = $forms->getData();
+    //         $parcours->setUser($this->getUser());
+    //         $parcours->setCreatedAt(new \DateTime());
+    //         $parcours->setUpdatedAt(new \DateTime());
+    //         $parcours->setActive(true);
+    //         $em->persist($parcours);
+    //         $em->flush();
+    //         return $this->redirectToRoute('teacher_parcours');
+    //     }
 
-        return $this->render('teacher/parcoursAdd.html.twig', [
-            'form' => $forms->createView(),
-        ]);
-    }
+    //     return $this->render('teacher/parcoursAdd.html.twig', [
+    //         'form' => $forms->createView(),
+    //     ]);
+    // }
 }

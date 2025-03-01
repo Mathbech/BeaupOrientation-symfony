@@ -90,11 +90,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Courses::class, mappedBy: 'user')]
     private Collection $courses;
 
-    /**
-     * @var Collection<int, Parcours>
-     */
-    #[ORM\OneToMany(targetEntity: Parcours::class, mappedBy: 'user')]
-    private Collection $parcours;
+    // /**
+    //  * @var Collection<int, Parcours>
+    //  */
+    // #[ORM\OneToMany(targetEntity: Parcours::class, mappedBy: 'user')]
+    // private Collection $parcours;
 
     /**
      * @var Collection<int, Runners>
@@ -108,7 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updatedAt = new \DateTimeImmutable();
         $this->active = true;
         $this->markers = new ArrayCollection();
-        $this->parcours = new ArrayCollection();
+        // $this->parcours = new ArrayCollection();
         $this->runners = new ArrayCollection();
     }
 
@@ -307,35 +307,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Parcours>
-     */
-    public function getParcours(): Collection
-    {
-        return $this->parcours;
-    }
+    // /**
+    //  * @return Collection<int, Parcours>
+    //  */
+    // public function getParcours(): Collection
+    // {
+    //     return $this->parcours;
+    // }
 
-    public function addParcour(Parcours $parcour): static
-    {
-        if (!$this->parcours->contains($parcour)) {
-            $this->parcours->add($parcour);
-            $parcour->setUser($this);
-        }
+    // public function addParcour(Parcours $parcour): static
+    // {
+    //     if (!$this->parcours->contains($parcour)) {
+    //         $this->parcours->add($parcour);
+    //         $parcour->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeParcour(Parcours $parcour): static
-    {
-        if ($this->parcours->removeElement($parcour)) {
-            // set the owning side to null (unless already changed)
-            if ($parcour->getUser() === $this) {
-                $parcour->setUser(null);
-            }
-        }
+    // public function removeParcour(Parcours $parcour): static
+    // {
+    //     if ($this->parcours->removeElement($parcour)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($parcour->getUser() === $this) {
+    //             $parcour->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * @return Collection<int, Runners>
