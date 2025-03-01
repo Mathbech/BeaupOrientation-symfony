@@ -17,7 +17,7 @@ class CoursesRepository extends ServiceEntityRepository
     }
 
     /**
-     * Undocumented function
+     * Display courses by users
      *
      * @return void
      * @author Mathieu Bechade
