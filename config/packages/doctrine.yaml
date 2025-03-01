@@ -38,6 +38,7 @@ doctrine:
                 st_area: LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard\StArea
             string_functions:
                 sp_asgeojson: LongitudeOne\Spatial\ORM\Query\AST\Functions\Postgresql\SpAsGeoJson
+                group_concat: DoctrineExtensions\Query\Mysql\GroupConcat
 
 when@test:
     doctrine:

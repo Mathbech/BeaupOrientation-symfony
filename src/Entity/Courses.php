@@ -20,8 +20,8 @@ class Courses
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'courses')]
-    private ?Parcours $parcours = null;
+    // #[ORM\ManyToOne(inversedBy: 'courses')]
+    // private ?Parcours $parcours = null;
 
     #[ORM\ManyToOne(inversedBy: 'courses')]
     private ?User $user = null;
@@ -54,17 +54,17 @@ class Courses
         return $this;
     }
 
-    public function getParcours(): ?Parcours
-    {
-        return $this->parcours;
-    }
+    // public function getParcours(): ?Parcours
+    // {
+    //     return $this->parcours;
+    // }
 
-    public function setParcours(?Parcours $parcours): static
-    {
-        $this->parcours = $parcours;
+    // public function setParcours(?Parcours $parcours): static
+    // {
+    //     $this->parcours = $parcours;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getUser(): ?User
     {

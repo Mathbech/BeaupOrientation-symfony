@@ -16,28 +16,21 @@ class CoursesRepository extends ServiceEntityRepository
         parent::__construct($registry, Courses::class);
     }
 
-    //    /**
-    //     * @return Courses[] Returns an array of Courses objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Courses
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Undocumented function
+     *
+     * @return void
+     * @author Mathieu Bechade
+     */
+    public function getCoursesByUser($user)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.id AS course_id, c.name AS course_name, GROUP_CONCAT(r.name) AS runners')
+            ->leftJoin('c.runners', 'r')
+            ->where('c.user = :user')
+            ->setParameter('user', $user)
+            ->groupBy('c.id')
+            ->getQuery()
+            ->getResult();
+    }
 }

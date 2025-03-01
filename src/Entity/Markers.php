@@ -61,19 +61,19 @@ class Markers
     #[ORM\ManyToOne(inversedBy: 'markers')]
     private ?User $teacher = null;
 
-    /**
-     * @var Collection<int, Parcours>
-     */
-    #[ORM\ManyToMany(targetEntity: Parcours::class, mappedBy: 'markers')]
-    private Collection $parcours;
+    // /**
+    //  * @var Collection<int, Parcours>
+    //  */
+    // #[ORM\ManyToMany(targetEntity: Parcours::class, mappedBy: 'markers')]
+    // private Collection $parcours;
 
     #[ORM\Column(type: 'geometry_point', nullable: true)]
     private ?SpatialInterface $point = null;
 
-    public function __construct()
-    {
-        $this->parcours = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     $this->parcours = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -188,32 +188,32 @@ class Markers
         return $this;
     }
 
-    /**
-     * @return Collection<int, Parcours>
-     */
-    public function getParcours(): Collection
-    {
-        return $this->parcours;
-    }
+    // /**
+    //  * @return Collection<int, Parcours>
+    //  */
+    // public function getParcours(): Collection
+    // {
+    //     return $this->parcours;
+    // }
 
-    public function addParcour(Parcours $parcour): static
-    {
-        if (!$this->parcours->contains($parcour)) {
-            $this->parcours->add($parcour);
-            $parcour->addMarker($this);
-        }
+    // public function addParcour(Parcours $parcour): static
+    // {
+    //     if (!$this->parcours->contains($parcour)) {
+    //         $this->parcours->add($parcour);
+    //         $parcour->addMarker($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeParcour(Parcours $parcour): static
-    {
-        if ($this->parcours->removeElement($parcour)) {
-            $parcour->removeMarker($this);
-        }
+    // public function removeParcour(Parcours $parcour): static
+    // {
+    //     if ($this->parcours->removeElement($parcour)) {
+    //         $parcour->removeMarker($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getPoint(): ?SpatialInterface
     {
