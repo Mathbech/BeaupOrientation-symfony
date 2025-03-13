@@ -34,7 +34,7 @@ class CoursesRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->groupBy('c.id');
 
-        if ($id !== null) {
+        if (!empty($id)) {
             $qb->andWhere('c.id = :id')
                 ->setParameter('id', $id);
         }

@@ -20,7 +20,7 @@ class TeacherController extends AbstractController
     private $user;
     public function __construct(Security $security)
     {
-        $this->user = $security->getUser();
+        $this->user = $security->getUser()->getId();
     }
     #[Route('/', name: 'teacher_home')]
     public function index(EntityManagerInterface $em): Response
