@@ -9,6 +9,7 @@ import 'datatables.net';
  */
 
 import './styles/app.css';
+import './js/clikable.js';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
