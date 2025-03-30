@@ -30,7 +30,7 @@
 						{% for courseData in coursesData %}
 							<tr class="clickable-row" data-href="{{ path('teacher_courses', {'id': courseData.id}) }}">
 								<td>{{ courseData.name }}</td>
-								<td>{{ courseData.runners }}</td>
+								<td>{{ courseData.runnercount }}</td>
                                 <td> {{ courseData.markers }} </td>
 							</tr>
 						{% endfor %}
