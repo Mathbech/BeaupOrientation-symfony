@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	gettext \
 	git \
 	openssl \
-	&& rm -rf /var/lib/apt/lists/*
+	&& rm -rf /var/lib/apt/lists/* \
+	&& pecl install redis && docker-php-ext-enable redis
 
 RUN set -eux; \
 	install-php-extensions \
