@@ -27,7 +27,7 @@ class CoursesRepository extends ServiceEntityRepository
         ?int $id = null
     ): array {
         $qb = $this->createQueryBuilder('c')
-            ->select('c.id, c.name, GROUP_CONCAT(r.name) AS runners, COUNT(m) AS markers, GROUP_CONCAT(DISTINCT CONCAT(ST_X(m.point), ST_Y(m.point))) AS point')
+            ->select('c.id, c.name, COUNT(r) AS runnercount, GROUP_CONCAT(r.name) AS runners, COUNT(m) AS markers, GROUP_CONCAT(DISTINCT CONCAT(ST_X(m.point), ST_Y(m.point))) AS point')
             ->leftJoin('c.runners', 'r')
             ->leftJoin('c.markers', 'm')
             ->andWhere('c.user = :user')
