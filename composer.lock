@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35cde23c6b28cb07bbfbdcf3fc2fc60e",
+    "content-hash": "9821ac4f2b7577d20e50e21b95ad41dc",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -3990,6 +3990,97 @@
             "time": "2023-12-12T12:06:11+00:00"
         },
         {
+            "name": "snc/redis-bundle",
+            "version": "4.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/snc/SncRedisBundle.git",
+                "reference": "1577b80bda8b488c45ebe14fdb72e42273c3aa8b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/snc/SncRedisBundle/zipball/1577b80bda8b488c45ebe14fdb72e42273c3aa8b",
+                "reference": "1577b80bda8b488c45ebe14fdb72e42273c3aa8b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0",
+                "symfony/deprecation-contracts": "^2 || ^3",
+                "symfony/framework-bundle": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/http-foundation": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/service-contracts": ">=1.0",
+                "symfony/var-dumper": "^5.4.20 ||^6.0 || ^7.0"
+            },
+            "conflict": {
+                "ext-redis": "<5.3.2",
+                "predis/predis": "<2.0"
+            },
+            "require-dev": {
+                "doctrine/annotations": "^2.0",
+                "doctrine/coding-standard": "^12.0",
+                "ext-pdo_sqlite": "*",
+                "ext-redis": "*",
+                "friendsofphp/proxy-manager-lts": "^1.0.6",
+                "monolog/monolog": "*",
+                "phpunit/phpunit": "^9.5.28 || ^10",
+                "predis/predis": "^2.0",
+                "seec/phpunit-consecutive-params": "dev-master",
+                "symfony/browser-kit": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/cache": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/config": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/console": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/dom-crawler": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/filesystem": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/stopwatch": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/twig-bundle": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/web-profiler-bundle": "^5.4.20 ||^6.0 || ^7.0",
+                "symfony/yaml": "^5.4.20 ||^6.0 || ^7.0",
+                "vimeo/psalm": "^5.2"
+            },
+            "suggest": {
+                "monolog/monolog": "If you want to use the monolog redis handler.",
+                "predis/predis": "If you want to use predis.",
+                "symfony/console": "If you want to use commands to interact with the redis database"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Snc\\RedisBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Henrik Westphal",
+                    "email": "henrik.westphal@gmail.com"
+                },
+                {
+                    "name": "Community contributors",
+                    "homepage": "https://github.com/snc/SncRedisBundle/contributors"
+                }
+            ],
+            "description": "A Redis bundle for Symfony",
+            "homepage": "https://github.com/snc/SncRedisBundle",
+            "keywords": [
+                "nosql",
+                "redis",
+                "symfony"
+            ],
+            "support": {
+                "issues": "https://github.com/snc/SncRedisBundle/issues",
+                "source": "https://github.com/snc/SncRedisBundle/tree/4.8.0"
+            },
+            "time": "2024-12-13T13:33:19+00:00"
+        },
+        {
             "name": "symfony/asset",
             "version": "v7.2.0",
             "source": {
@@ -4139,16 +4230,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v7.2.1",
+            "version": "v7.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "e7e983596b744c4539f31e79b0350a6cf5878a20"
+                "reference": "9131e3018872d2ebb6fe8a9a4d6631273513d42c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/e7e983596b744c4539f31e79b0350a6cf5878a20",
-                "reference": "e7e983596b744c4539f31e79b0350a6cf5878a20",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/9131e3018872d2ebb6fe8a9a4d6631273513d42c",
+                "reference": "9131e3018872d2ebb6fe8a9a4d6631273513d42c",
                 "shasum": ""
             },
             "require": {
@@ -4217,7 +4308,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v7.2.1"
+                "source": "https://github.com/symfony/cache/tree/v7.2.5"
             },
             "funding": [
                 {
@@ -4233,7 +4324,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-07T08:08:50+00:00"
+            "time": "2025-03-25T15:54:33+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -7553,6 +7644,73 @@
                 }
             ],
             "time": "2024-12-31T11:04:50+00:00"
+        },
+        {
+            "name": "symfony/redis-messenger",
+            "version": "v7.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/redis-messenger.git",
+                "reference": "3d55d4930d2783ac2cc80f8338730f0f7a7f80d7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/redis-messenger/zipball/3d55d4930d2783ac2cc80f8338730f0f7a7f80d7",
+                "reference": "3d55d4930d2783ac2cc80f8338730f0f7a7f80d7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-redis": "*",
+                "php": ">=8.2",
+                "symfony/messenger": "^6.4|^7.0"
+            },
+            "require-dev": {
+                "symfony/property-access": "^6.4|^7.0",
+                "symfony/serializer": "^6.4|^7.0"
+            },
+            "type": "symfony-messenger-bridge",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Messenger\\Bridge\\Redis\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Redis extension Messenger Bridge",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/redis-messenger/tree/v7.2.3"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-01-07T09:39:55+00:00"
         },
         {
             "name": "symfony/routing",
