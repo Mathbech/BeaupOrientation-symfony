@@ -3,9 +3,9 @@
 namespace App\State;
 
 use ApiPlatform\State\ProviderInterface;
+use App\Entity\Courses;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Markers;
-use App\Entity\Runners;
 
 class MarkersProvider implements ProviderInterface
 {
@@ -15,29 +15,22 @@ class MarkersProvider implements ProviderInterface
 
     public function provide(\ApiPlatform\Metadata\Operation $operation, array $uriVariables = [], array $context = []): array
     {
-        // 🔍 Vérifier si le runnerId est passé en paramètre
-        $runnerId = $context['request']->query->get('runnerId');
+        // 🔍 Vérifier si le courseId est passé en paramètre
+        $courseId = $context['request']->query->get('courseId');
 
-        if (!$runnerId) {
-            return []; // ❌ Aucun runnerId fourni → Liste vide
+        if (!$courseId) {
+            return []; // ❌ Aucun courseId fourni → Liste vide
         }
 
-        // 🔍 Récupérer le Runner en base
-        $runner = $this->entityManager->getRepository(Runners::class)->find($runnerId);
+        // 🔍 Récupérer la course en base
+        $course = $this->entityManager->getRepository(Courses::class)->find($courseId);
 
-        if (!$runner) {
-            return []; // ❌ Aucun Runner trouvé avec cet ID
+        if (!$course) {
+            return []; // ❌ Aucun course trouvé avec cet ID
         }
 
-        // 🔍 Récupérer le teacherId lié
-        $teacher = $runner->getTeacherId();
-
-        if (!$teacher) {
-            return []; // ❌ Aucun teacherId → Liste vide
-        }
-
-        // ✅ Filtrer les markers appartenant à cet User (teacher)
+        // ✅ Filtrer les markers appartenant à cette course
         return $this->entityManager->getRepository(Markers::class)
-            ->findBy(['teacher' => $teacher]);
+            ->findBy(['courses' => $course]);
     }
 }
