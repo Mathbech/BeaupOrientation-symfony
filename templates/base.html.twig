@@ -21,6 +21,15 @@
             {% if has_navbar is defined and has_navbar %}
                 {% include 'includes/navbar.html.twig' %}
             {% endif %}
+            <div style="position: fixed; top: 10px; right: 10px; z-index: 1050;">
+                {% for label, messages in app.flashes %}
+                    <div class="alert alert-{{ label }}" role="alert">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
             {% block body %}{% endblock %}
         </div>
 	</body>
