@@ -27,19 +27,31 @@ class CoursesRepository extends ServiceEntityRepository
         ?int $id = null
     ): array {
         $qb = $this->createQueryBuilder('c')
-            ->select('c.id, c.name, COUNT(r) AS runnercount, GROUP_CONCAT(r.name) AS runners, COUNT(m) AS markers, GROUP_CONCAT(DISTINCT CONCAT(ST_X(m.point), ST_Y(m.point))) AS point')
+            ->select('c.id, c.name')
+            ->addSelect('COUNT(DISTINCT r.id) AS runnercount')
+            ->addSelect('COUNT(DISTINCT m.id) AS markers')
             ->leftJoin('c.runners', 'r')
             ->leftJoin('c.markers', 'm')
-            ->andWhere('c.user = :user')
-            ->setParameter('user', $user)
             ->groupBy('c.id');
+
+        if (!empty($user)) {
+            $qb->andWhere('c.user = :user')
+                ->setParameter('user', $user);
+        }
 
         if (!empty($id)) {
             $qb->andWhere('c.id = :id')
                 ->setParameter('id', $id);
+
+            // Concatène les informations des markers (latitude, longitude, QR code et ID)
+            $qb->addSelect("group_concat(DISTINCT CONCAT(m.id, ':', st_x(m.point), ':', st_y(m.point), ':', COALESCE(m.qrCode, ''))) AS markersData");
+
+            $qb->addSelect('group_concat(DISTINCT r.name) AS runners');
         }
 
         return $qb->getQuery()
             ->getResult();
     }
+
+
 }
