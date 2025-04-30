@@ -14,7 +14,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils, Security $security): Response
     {
         if ($this->getUser()) {
-            // return $this->redirectToRoute('teacher_dashboard');
+            // return $this->redirectToRoute('teacher_home');
             if ($security->isGranted('ROLE_ADMIN')) {
                 // Redirigez vers la page d'administration
                 return $this->redirectToRoute('admin'); // Remplacez par votre route d'administration
@@ -49,7 +49,7 @@ class SecurityController extends AbstractController
                 return $this->redirectToRoute('admin'); // Remplacez par votre route d'administration
             } elseif ($security->isGranted('ROLE_USER')) {
                 // Redirigez vers la page utilisateur
-                return $this->redirectToRoute('teacher_dashboard'); // Remplacez par votre route utilisateur
+                return $this->redirectToRoute('teacher_home'); // Remplacez par votre route utilisateur
             }
         }
 

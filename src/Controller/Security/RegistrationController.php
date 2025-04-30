@@ -67,7 +67,7 @@ class RegistrationController extends AbstractController
             $session->remove('school');
 
             // Redirect to the admin page or any other page
-            return $this->redirectToRoute('teacher_dashboard');
+            return $this->redirectToRoute('teacher_home');
         }
 
         return $this->render('Security/registration/register_step_2.html.twig', [

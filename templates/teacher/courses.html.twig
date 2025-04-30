@@ -2,44 +2,95 @@
 {% set has_navbar = true %}
 {% set has_footer = false %}
 
-{% block title %}{% endblock %}
+{% block title %}Détails de la course{% endblock %}
 
 {% block body %}
     <div class="container-fluid">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Courses</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                {# <a href="{{ path('teacher_course_add') }}" class="btn btn-primary">Ajouter une course</a> #}
-                <table id="courses-table" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Runners</th>
-                            <th>Markers</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for courseData in coursesData %}
-                            <tr>
-                                <td>{{ courseData.name }}</td>
-                                <td>
-                                    <ul>
-                                        <li>{{ courseData.runners }}</li>
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>{{ courseData.point }}</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <h1>{{ coursesData.name }}</h1>
+
+        <h3>Runners</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for runner in coursesData.runners %}
+                    <tr>
+                        <td>{{ runner }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Markers</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>QR Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for marker in coursesData.markers %}
+                    <tr>
+                        <td>{{ marker.latitude }}</td>
+                        <td>{{ marker.longitude }}</td>
+                        <td>
+                            {% if marker.qrCode %}
+                                <img src="{{ asset('uploads' ~ marker.qrCode) }}" alt="QR Code" style="width: 100px; height: 100px;">
+                                <br>
+                                <button class="btn btn-secondary btn-sm mt-2" onclick="printQrCode('{{ asset('uploads' ~ marker.qrCode) }}')">
+                                    Imprimer
+                                </button>
+                            {% else %}
+                                <a href="{{ path('marker_generate_qr', { id: marker.id }) }}" class="btn btn-primary">
+                                    Générer QR Code
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function printQrCode(imageUrl) {
+        // Crée une nouvelle fenêtre
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+            // Contenu HTML complet avec échappement de la balise <script>
+            const htmlContent = '<html>' +
+                '<head>' +
+                '<title>Impression du QR Code</title>' +
+                '<style>' +
+                'body { text-align: center; margin: 0; padding: 20px; }' +
+                'img { max-width: 100%; height: auto; }' +
+                '</style>' +
+                '</head>' +
+                '<body>' +
+                '<img src="' + imageUrl + '" alt="QR Code">' +
+                '<scr' + 'ipt>' +
+                'window.onload = function() {' +
+                'window.print();' +
+                'window.close();' +
+                '};' +
+                '</scr' + 'ipt>' +
+                '</body>' +
+                '</html>';
+
+            // Injecte le contenu et ferme le flux
+            printWindow.document.open();
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+        } else {
+            alert("Impossible d'ouvrir la fenêtre d'impression.");
+        }
+    }
+</script>
 {% endblock %}

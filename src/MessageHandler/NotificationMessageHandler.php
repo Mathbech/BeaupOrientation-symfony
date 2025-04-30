@@ -2,7 +2,7 @@
 
 namespace App\MessageHandler;
 
-use App\Message\NotificationMessage;
+use App\Messages\NotificationMessage;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
