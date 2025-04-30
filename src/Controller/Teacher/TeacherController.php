@@ -89,8 +89,6 @@ class TeacherController extends AbstractController
 
         unset($coursesData['markersData']); // Supprime la clé brute
 
-        dump($coursesData);
-
         return $this->render('teacher/courses.html.twig', [
             'coursesData' => $coursesData,
         ]);

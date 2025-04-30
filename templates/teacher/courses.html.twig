@@ -40,7 +40,11 @@
                         <td>{{ marker.longitude }}</td>
                         <td>
                             {% if marker.qrCode %}
-                                {{ marker.qrCode }}
+                                <img src="{{ asset('uploads' ~ marker.qrCode) }}" alt="QR Code" style="width: 100px; height: 100px;">
+                                <br>
+                                <button class="btn btn-secondary btn-sm mt-2" onclick="printQrCode('{{ asset('uploads' ~ marker.qrCode) }}')">
+                                    Imprimer
+                                </button>
                             {% else %}
                                 <a href="{{ path('marker_generate_qr', { id: marker.id }) }}" class="btn btn-primary">
                                     Générer QR Code
@@ -52,4 +56,41 @@
             </tbody>
         </table>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function printQrCode(imageUrl) {
+        // Crée une nouvelle fenêtre
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+            // Contenu HTML complet avec échappement de la balise <script>
+            const htmlContent = '<html>' +
+                '<head>' +
+                '<title>Impression du QR Code</title>' +
+                '<style>' +
+                'body { text-align: center; margin: 0; padding: 20px; }' +
+                'img { max-width: 100%; height: auto; }' +
+                '</style>' +
+                '</head>' +
+                '<body>' +
+                '<img src="' + imageUrl + '" alt="QR Code">' +
+                '<scr' + 'ipt>' +
+                'window.onload = function() {' +
+                'window.print();' +
+                'window.close();' +
+                '};' +
+                '</scr' + 'ipt>' +
+                '</body>' +
+                '</html>';
+
+            // Injecte le contenu et ferme le flux
+            printWindow.document.open();
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+        } else {
+            alert("Impossible d'ouvrir la fenêtre d'impression.");
+        }
+    }
+</script>
 {% endblock %}
