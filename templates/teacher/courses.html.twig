@@ -2,44 +2,54 @@
 {% set has_navbar = true %}
 {% set has_footer = false %}
 
-{% block title %}{% endblock %}
+{% block title %}Détails de la course{% endblock %}
 
 {% block body %}
     <div class="container-fluid">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Courses</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                {# <a href="{{ path('teacher_course_add') }}" class="btn btn-primary">Ajouter une course</a> #}
-                <table id="courses-table" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Runners</th>
-                            <th>Markers</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for courseData in coursesData %}
-                            <tr>
-                                <td>{{ courseData.name }}</td>
-                                <td>
-                                    <ul>
-                                        <li>{{ courseData.runners }}</li>
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>{{ courseData.point }}</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <h1>{{ coursesData.name }}</h1>
+
+        <h3>Runners</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for runner in coursesData.runners %}
+                    <tr>
+                        <td>{{ runner }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Markers</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>QR Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for marker in coursesData.markers %}
+                    <tr>
+                        <td>{{ marker.latitude }}</td>
+                        <td>{{ marker.longitude }}</td>
+                        <td>
+                            {% if marker.qrCode %}
+                                {{ marker.qrCode }}
+                            {% else %}
+                                <a href="{{ path('marker_generate_qr', { id: marker.id }) }}" class="btn btn-primary">
+                                    Générer QR Code
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}

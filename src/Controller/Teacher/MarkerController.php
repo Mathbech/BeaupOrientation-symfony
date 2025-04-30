@@ -9,6 +9,7 @@ use App\Service\QrCodeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class MarkerController extends AbstractController
 {
@@ -16,8 +17,9 @@ class MarkerController extends AbstractController
     public function generateQr(
         Markers $marker,
         QrCodeService $qrCodeService,
-        EntityManagerInterface $em
-        ) {
+        EntityManagerInterface $em,
+        Request $request // Injection de l'objet Request
+    ) {
         // Vérifier que le marker appartient à l'utilisateur connecté
         $user = $this->getUser();
         if ($marker->getTeacher() !== $user) {
@@ -25,11 +27,19 @@ class MarkerController extends AbstractController
             return $this->redirectToRoute('teacher_home');
         }
 
-        if ($marker->getTeacher() === $user) {$qrPath = $qrCodeService->generateQrCodeForMarker($marker);
+        // Générer le QR Code
+        $qrPath = $qrCodeService->generateQrCodeForMarker($marker);
         $marker->setQrCode($qrPath);
         $em->flush();
 
         $this->addFlash('success', 'QR Code généré avec succès.');
-        return $this->redirectToRoute('teacher_home');}
+
+        // Rediriger vers la page précédente ou vers une route par défaut
+        $referer = $request->headers->get('referer'); // Utilisation de l'objet Request
+        if ($referer) {
+            return $this->redirect($referer);
+        }
+
+        return $this->redirectToRoute('teacher_home');
     }
 }

@@ -29,9 +29,8 @@ class TeacherController extends AbstractController
         $coursesRepository = $em->getRepository(Courses::class);
         // $parcoursRepository = $em->getRepository(Parcours::class);
 
-        $coursesData = $coursesRepository->getCoursesByUser($this->user, 0);
+        $coursesData = $coursesRepository->getCoursesByUser($this->user, null);
         // $parcoursData = $parcoursRepository->findBy(['user' => $this->getUser()]);
-        dump($coursesData);
         return $this->render('teacher/home.html.twig', [
             'coursesData' => $coursesData,
             // 'parcoursData' => $parcoursData,
@@ -43,6 +42,55 @@ class TeacherController extends AbstractController
     {
         $coursesRepository = $em->getRepository(Courses::class);
         $coursesData = $coursesRepository->getCoursesByUser($this->user, $id);
+
+        // Transformation des données pour la vue
+        if (!empty($coursesData)) {
+            $coursesData = $coursesData[0]; // On prend uniquement la première entrée
+            $coursesData['runners'] = !empty($coursesData['runners']) ? explode(',', $coursesData['runners']) : [];
+
+            // Combine points and QR codes into a single structure
+            if (!empty($coursesData['point']) && !empty($coursesData['qrCode'])) {
+                $points = array_map(function ($point) {
+                    return explode(' : ', $point);
+                }, explode(',', $coursesData['point']));
+
+                $qrCodes = explode(',', $coursesData['qrCode']);
+                $markerIds = explode(',', $coursesData['markersId']); // Ajoutez cette ligne pour récupérer les IDs des markers
+
+                // Associer chaque point, QR code et ID
+                $coursesData['markers'] = array_map(function ($point, $qrCode, $id) {
+                    return [
+                        'id' => $id, // Ajoutez l'ID du marker
+                        'latitude' => $point[0],
+                        'longitude' => $point[1],
+                        'qrCode' => $qrCode,
+                    ];
+                }, $points, $qrCodes, $markerIds);
+            } else {
+                $coursesData['markers'] = [];
+            }
+
+            unset($coursesData['point'], $coursesData['qrCode']); // Supprime les clés inutiles
+        }
+
+        if (!empty($coursesData['markersData'])) {
+            $coursesData['markers'] = array_map(function ($marker) {
+                [$id, $latitude, $longitude, $qrCode] = explode(':', $marker);
+                return [
+                    'id' => $id,
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                    'qrCode' => $qrCode,
+                ];
+            }, explode(',', $coursesData['markersData']));
+        } else {
+            $coursesData['markers'] = [];
+        }
+
+        unset($coursesData['markersData']); // Supprime la clé brute
+
+        dump($coursesData);
+
         return $this->render('teacher/courses.html.twig', [
             'coursesData' => $coursesData,
         ]);
