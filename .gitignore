@@ -44,4 +44,4 @@ yarn-error.log
 
 ## ignore dbml files
 *.dbml
-dbml-errors.log
+dbml-error.log
