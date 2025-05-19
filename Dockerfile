@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     file \
     gettext \
     git \
+	nodejs \
+	npm \
     openssl \
     libpng-dev \
     libjpeg-dev \

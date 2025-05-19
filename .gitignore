@@ -41,3 +41,7 @@ yarn-error.log
 
 /public/uploads/qrcodes/
 !/public/uploads/qrcodes/.gitkeep
+
+## ignore dbml files
+*.dbml
+dbml-errors.log
