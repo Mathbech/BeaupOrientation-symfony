@@ -56,16 +56,20 @@ class TeacherController extends AbstractController
 
                 $qrCodes = explode(',', $coursesData['qrCode']);
                 $markerIds = explode(',', $coursesData['markersId']); // Ajoutez cette ligne pour récupérer les IDs des markers
+                $markerNames = explode(',', $coursesData['markerName']); // Récupérer les noms des markers
+                $markerTypes = explode(',', $coursesData['markerType']); // Récupérer les types des markers
 
                 // Associer chaque point, QR code et ID
-                $coursesData['markers'] = array_map(function ($point, $qrCode, $id) {
+                $coursesData['markers'] = array_map(function ($point, $qrCode, $id, $name, $type) {
                     return [
-                        'id' => $id, // Ajoutez l'ID du marker
+                        'id' => $id,
                         'latitude' => $point[0],
                         'longitude' => $point[1],
                         'qrCode' => $qrCode,
+                        'name' => $name,   // <-- ici
+                        'type' => $type,   // <-- ici
                     ];
-                }, $points, $qrCodes, $markerIds);
+                }, $points, $qrCodes, $markerIds, $markerNames, $markerTypes);
             } else {
                 $coursesData['markers'] = [];
             }
@@ -75,12 +79,15 @@ class TeacherController extends AbstractController
 
         if (!empty($coursesData['markersData'])) {
             $coursesData['markers'] = array_map(function ($marker) {
-                [$id, $latitude, $longitude, $qrCode] = explode(':', $marker);
+                // On récupère les 6 champs
+                [$id, $latitude, $longitude, $qrCode, $type, $name] = explode(':', $marker);
                 return [
                     'id' => $id,
                     'latitude' => $latitude,
                     'longitude' => $longitude,
                     'qrCode' => $qrCode,
+                    'type' => $type,
+                    'name' => $name,
                 ];
             }, explode(',', $coursesData['markersData']));
         } else {
