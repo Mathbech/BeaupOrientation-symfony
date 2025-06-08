@@ -41,11 +41,14 @@
                         <td>{{ marker.longitude }}</td>
                         <td>
                             {% if marker.qrCode %}
-                                <img src="{{ asset('uploads' ~ marker.qrCode) }}" alt="QR Code" class="qr-code-img" style="width: 100px; height: 100px;">
+                                <div class="qr-code-block" style="text-align: center;">
+                                    <img src="{{ asset('uploads' ~ marker.qrCode) }}" alt="QR Code" class="qr-code-img" style="width: 100px; height: 100px;">
+                                    <div class="qr-code-name" style="margin-top: 5px;">{{ marker.name }}</div>
+                                </div>
                                 <br>
-                                <button class="btn btn-secondary btn-sm mt-2" onclick="printQrCode('{{ asset('uploads' ~ marker.qrCode) }}')">
+                                {# <button class="btn btn-secondary btn-sm mt-2" onclick="printQrCode('{{ asset('uploads' ~ marker.qrCode) }}', '{{ marker.name|e('js') }}')">
                                     Imprimer
-                                </button>
+                                </button> #}
                             {% else %}
                                 <a href="{{ path('marker_generate_qr', { id: marker.id }) }}" class="btn btn-primary">
                                     Générer QR Code
@@ -61,21 +64,21 @@
 
 {% block javascripts %}
 <script>
-    function printQrCode(imageUrl) {
-        // Crée une nouvelle fenêtre
+    function printQrCode(imageUrl, markerName) {
         const printWindow = window.open('', '_blank');
         if (printWindow) {
-            // Contenu HTML complet avec échappement de la balise <script>
             const htmlContent = '<html>' +
                 '<head>' +
                 '<title>Impression du QR Code</title>' +
                 '<style>' +
                 'body { text-align: center; margin: 0; padding: 20px; }' +
                 'img { max-width: 100%; height: auto; }' +
+                '.qr-code-name { margin-top: 10px; font-size: 18px; font-weight: bold; }' +
                 '</style>' +
                 '</head>' +
                 '<body>' +
-                '<img src="' + imageUrl + '" alt="QR Code">' +
+                '<img src="' + imageUrl + '" alt="QR Code"><br>' +
+                '<div class="qr-code-name">' + markerName + '</div>' +
                 '<scr' + 'ipt>' +
                 'window.onload = function() {' +
                 'window.print();' +
@@ -84,8 +87,6 @@
                 '</scr' + 'ipt>' +
                 '</body>' +
                 '</html>';
-
-            // Injecte le contenu et ferme le flux
             printWindow.document.open();
             printWindow.document.write(htmlContent);
             printWindow.document.close();
@@ -95,21 +96,23 @@
     }
 
     function printAllQrCodes() {
-        // Récupère toutes les images QR affichées
-        const qrImages = document.querySelectorAll('.qr-code-img');
-        if (qrImages.length === 0) {
+        // Récupère tous les blocs QR affichés
+        const qrBlocks = document.querySelectorAll('.qr-code-block');
+        if (qrBlocks.length === 0) {
             alert("Aucun QR Code à imprimer.");
             return;
         }
 
-        // Construit le HTML à imprimer
-        let htmlContent = '<html><head><title>Impression des QR Codes</title><style>body{text-align:center;margin:0;padding:20px;} img{max-width:100%;height:auto;margin:10px;}</style></head><body>';
-        qrImages.forEach(img => {
-            htmlContent += '<img src="' + img.src + '" alt="QR Code"><br>';
+        let htmlContent = '<html><head><title>Impression des QR Codes</title><style>body{text-align:center;margin:0;padding:20px;} img{max-width:100%;height:auto;margin:10px;} .qr-code-name{margin-top:10px;font-size:18px;font-weight:bold;}</style></head><body>';
+        qrBlocks.forEach(block => {
+            const img = block.querySelector('.qr-code-img');
+            const name = block.querySelector('.qr-code-name');
+            if (img && name) {
+                htmlContent += '<div style="display:inline-block;margin:20px;"><img src="' + img.src + '" alt="QR Code"><br><div class="qr-code-name">' + name.textContent + '</div></div>';
+            }
         });
         htmlContent += '<script>window.onload=function(){window.print();window.close();};<\/script></body></html>';
 
-        // Ouvre la fenêtre d'impression
         const printWindow = window.open('', '_blank');
         if (printWindow) {
             printWindow.document.open();
