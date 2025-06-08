@@ -23,6 +23,12 @@ services:
     App\Service\QrCodeService:
         arguments:
             $projectDir: '%kernel.project_dir%'
+    
+    App\DataPersister\MarkerDataPersister:
+        decorates: 'api_platform.doctrine.orm.state.persist_processor'
+        arguments:
+            $decoratedProcessor: '@App\DataPersister\MarkerDataPersister.inner'
+
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
