@@ -29,6 +29,13 @@ use LongitudeOne\Spatial\PHP\Types\SpatialInterface;
 
 class Markers
 {
+
+    public const TYPES = [
+        1 => 'Départ',
+        2 => 'Arrivée',
+        3 => 'Balise',
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
