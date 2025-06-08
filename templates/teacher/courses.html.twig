@@ -5,11 +5,8 @@
 {% block title %}Détails de la course{% endblock %}
 
 {% block body %}
-    <div class="container-fluid">
-        <h1>{{ coursesData.name }}</h1>
-
-        <h3>Runners</h3>
-        <table class="table table-bordered">
+    <div class="container">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Nom</th>
@@ -25,6 +22,10 @@
         </table>
 
         <h3>Markers</h3>
+         <!-- Bouton pour imprimer tous les QR codes -->
+        <button class="btn btn-secondary mb-3" onclick="printAllQrCodes()">
+            Imprimer tous les QR Codes
+        </button>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -40,7 +41,7 @@
                         <td>{{ marker.longitude }}</td>
                         <td>
                             {% if marker.qrCode %}
-                                <img src="{{ asset('uploads' ~ marker.qrCode) }}" alt="QR Code" style="width: 100px; height: 100px;">
+                                <img src="{{ asset('uploads' ~ marker.qrCode) }}" alt="QR Code" class="qr-code-img" style="width: 100px; height: 100px;">
                                 <br>
                                 <button class="btn btn-secondary btn-sm mt-2" onclick="printQrCode('{{ asset('uploads' ~ marker.qrCode) }}')">
                                     Imprimer
@@ -85,6 +86,32 @@
                 '</html>';
 
             // Injecte le contenu et ferme le flux
+            printWindow.document.open();
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+        } else {
+            alert("Impossible d'ouvrir la fenêtre d'impression.");
+        }
+    }
+
+    function printAllQrCodes() {
+        // Récupère toutes les images QR affichées
+        const qrImages = document.querySelectorAll('.qr-code-img');
+        if (qrImages.length === 0) {
+            alert("Aucun QR Code à imprimer.");
+            return;
+        }
+
+        // Construit le HTML à imprimer
+        let htmlContent = '<html><head><title>Impression des QR Codes</title><style>body{text-align:center;margin:0;padding:20px;} img{max-width:100%;height:auto;margin:10px;}</style></head><body>';
+        qrImages.forEach(img => {
+            htmlContent += '<img src="' + img.src + '" alt="QR Code"><br>';
+        });
+        htmlContent += '<script>window.onload=function(){window.print();window.close();};<\/script></body></html>';
+
+        // Ouvre la fenêtre d'impression
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
             printWindow.document.open();
             printWindow.document.write(htmlContent);
             printWindow.document.close();
