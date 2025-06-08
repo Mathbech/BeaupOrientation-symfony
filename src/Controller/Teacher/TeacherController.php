@@ -5,10 +5,9 @@ namespace App\Controller\Teacher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Courses;
-// use App\Entity\Parcours;
+use App\Entity\Markers;
 use App\Form\CourseAddFormType;
 use Symfony\Bundle\SecurityBundle\Security;
-// use App\Form\ParcoursAddFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -98,6 +97,7 @@ class TeacherController extends AbstractController
 
         return $this->render('teacher/courses.html.twig', [
             'coursesData' => $coursesData,
+            'markerTypes' => Markers::TYPES,
         ]);
     }
 

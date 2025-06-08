@@ -29,6 +29,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>Type</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
                     <th>QR Code</th>
@@ -37,6 +38,7 @@
             <tbody>
                 {% for marker in coursesData.markers %}
                     <tr>
+                        <td>{{ markerTypes[marker.type]|default('Inconnu') }}</td>
                         <td>{{ marker.latitude }}</td>
                         <td>{{ marker.longitude }}</td>
                         <td>
