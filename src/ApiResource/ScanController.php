@@ -78,12 +78,12 @@ class ScanController extends AbstractController
         $log->setRunner($runner);
         $log->setMarker($marker);
         $log->setPoint(new \LongitudeOne\Spatial\PHP\Types\Geometry\Point($scanLng, $scanLat)); // longitude, latitude
-        $log->setStatut($distance <= 5 ? 1 : 0);
+        $log->setStatut($distance <= $_ENV['DISTANCE_SCAN'] ? 1 : 0);
 
         $em->persist($log);
         $em->flush();
 
-        if ($distance > 5) {
+        if ($distance > $_ENV['DISTANCE_SCAN']) {
             return new JsonResponse(['status' => 'invalid', 'message' => 'Trop loin du marker (distance: ' . round($distance, 2) . ' m)']);
         }
 
