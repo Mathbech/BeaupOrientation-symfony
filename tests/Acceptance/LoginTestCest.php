@@ -26,6 +26,6 @@ class LoginTestCest
         $I->fillField('password', 'mauvais_motdepasse');
         $I->click('Sign In');
         $I->wait(2); // Attendre un peu pour que le message d'erreur s'affiche
-        $I->see('Identifiants invalidess'); // À adapter selon le message exact affiché
+        $I->see('Identifiants invalides'); // À adapter selon le message exact affiché
     }
 }
