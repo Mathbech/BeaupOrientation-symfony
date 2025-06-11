@@ -24,5 +24,5 @@ INSERT INTO markers (id, teacher_id, latitude, longitude, city, address, zip_cod
 
 -- Runners
 INSERT INTO runners (id, course_id, name, code, is_teacher, teacher_id_id) VALUES
-(1, 1, 'Runner 1', 'CODE123', 0, 1),
-(2, 2, 'Runner 2', 'CODE456', 0, 2);
+(1, 1, 'Prof1', 'Course1-1', 1, 2),
+(2, 1, 'Runner 1', 'Course1-2', 0, NULL);
