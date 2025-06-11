@@ -2,19 +2,17 @@ services:
   php:
     image: ${IMAGES_PREFIX:-}app-php
     restart: unless-stopped
+    container_name: beauporientation-php
     environment:
       SERVER_NAME: ${SERVER_NAME:-localhost}, php:80
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
       # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
-      DATABASE_URL: mysql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-password}@database:3306/${POSTGRES_DB:-app}
+      DATABASE_URL: mysql://${MYSQL_USER:-app}:${MYSQL_PASSWORD:-password}@database:3306/${MYSQL_DB:-app}
       # Run "composer require symfony/mercure-bundle" to install and configure the Mercure integration
       MERCURE_URL: ${CADDY_MERCURE_URL:-http://php/.well-known/mercure}
       MERCURE_PUBLIC_URL: ${CADDY_MERCURE_PUBLIC_URL:-https://${SERVER_NAME:-localhost}/.well-known/mercure}
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
-      # The two next lines can be removed after initial installation
-      SYMFONY_VERSION: ${SYMFONY_VERSION:-}
-      STABILITY: ${STABILITY:-stable}
     volumes:
       - caddy_data:/data
       - caddy_config:/config
@@ -39,6 +37,7 @@ services:
 ###> doctrine/doctrine-bundle ###
   database:
     image: mysql:${MYSQL_VERSION:-8}
+    container_name: beauporientation-database
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
@@ -51,6 +50,7 @@ services:
 
   phpmyadmin:
       image: phpmyadmin/phpmyadmin
+      container_name: beauporientation-phpmyadmin
       environment:
         PMA_HOST: database
         MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-password}
@@ -61,48 +61,52 @@ services:
 
   redis:
     image: redis:alpine
+    container_name: beauporientation-redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
-    environment:
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.security.enabled=false
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - es_data:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+  #   container_name: beauporientation-elasticsearch
+  #   environment:
+  #     - discovery.type=single-node
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - xpack.security.enabled=false
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   volumes:
+  #     - es_data:/usr/share/elasticsearch/data
+  #   ports:
+  #     - "9200:9200"
+  #     - "9300:9300"
 
-  # Ajout de Kibana
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.17.10
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
+  # # Ajout de Kibana
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:7.17.10
+  #   container_name: beauporientation-kibana
+  #   environment:
+  #     - ELASTICSEARCH_URL=http://elasticsearch:9200
+  #   ports:
+  #     - "5601:5601"
+  #   depends_on:
+  #     - elasticsearch
 
-  # Ajout de Logstash
-  logstash:
-    image: docker.elastic.co/logstash/logstash:7.17.10
-    volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-    ports:
-      - "5044:5044"
-      - "9600:9600"
-    depends_on:
-      - elasticsearch
+  # # Ajout de Logstash
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:7.17.10
+  #   container_name: beauporientation-logstash
+  #   volumes:
+  #     - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+  #   ports:
+  #     - "5044:5044"
+  #     - "9600:9600"
+  #   depends_on:
+  #     - elasticsearch
 
 volumes:
   caddy_data:
@@ -115,4 +119,4 @@ volumes:
 ###< doctrine/doctrine-bundle ###
 
   redis_data:
-  es_data: 
+  # es_data: 
