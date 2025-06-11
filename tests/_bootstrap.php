@@ -38,6 +38,9 @@ $runCommand = static function (string $name, array $options = []) use ($applicat
     $application->run($input);
 };
 
+echo "\n[ENV] Symfony utilise : " . ($_ENV['APP_ENV'] ?? '??') . "\n";
+
+
 $runCommand('doctrine:database:create', [
     '--if-not-exists' => true,
 ]);

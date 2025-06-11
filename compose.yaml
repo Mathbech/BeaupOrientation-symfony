@@ -66,6 +66,14 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+  
+  selenium:
+        container_name: beauporientation-selenium
+        image: selenium/standalone-chromium
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        volumes:
+            - '/dev/shm:/dev/shm'
 
   # elasticsearch:
   #   image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10

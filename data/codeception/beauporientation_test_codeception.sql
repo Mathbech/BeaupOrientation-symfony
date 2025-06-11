@@ -9,8 +9,8 @@ INSERT INTO schools (id, name, city, zip_code, adress, country, created_at, upda
 
 -- Utilisateurs (profs)
 INSERT INTO user (id, schools_id, email, roles, password, username, created_at, updated_at, active) VALUES
-(1, 1, 'prof1@example.com', '["ROLE_TEACHER"]', '$2y$10$examplehash1', 'prof1', '2025-06-11 07:26:34', '2025-06-11 07:26:34', 1),
-(2, 1, 'prof2@example.com', '["ROLE_TEACHER"]', '$2y$10$examplehash2', 'prof2', '2025-06-11 07:26:34', '2025-06-11 07:26:34', 1);
+(1, 1, 'admin@beauporientation.com', '["ROLE_ADMIN"]', 'test123#', 'Admin', '2025-06-11 07:26:34', '2025-06-11 07:26:34', 1),
+(2, 1, 'prof1@ecole.com', '["ROLE_TEACHER"]', 'Test123#', 'prof1', '2025-06-11 07:26:34', '2025-06-11 07:26:34', 1);
 
 -- Courses
 INSERT INTO courses (id, user_id, name) VALUES

@@ -6,8 +6,19 @@
 actor: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser:
+        - WebDriver:
             url: http://beauporientation-php:80
+            host: beauporientation-selenium
+            browser: chrome
+            window_size: 1920x1080
+            capabilities:
+                goog:chromeOptions:
+                    args:
+                        - '--lang=fr'
+        - Db:
+             dsn: 'mysql:host=beauporientation-database;dbname=app_test'
+             user: 'root'
+             password: 'root'
 # Add Codeception\Step\Retry trait to AcceptanceTester to enable retries
 step_decorators:
     - Codeception\Step\ConditionalAssertion
