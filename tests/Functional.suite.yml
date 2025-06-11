@@ -10,6 +10,10 @@ modules:
         - Symfony:
               app_path: 'src'
               environment: 'test'
-#        - Doctrine:
-#              depends: Symfony
-#              cleanup: true
+        - Doctrine:
+             depends: Symfony
+             cleanup: true
+        - Db:
+             dsn: 'mysql:host=Beauporientation-database;dbname=app_test'
+             user: 'root'
+             password: 'root'
