@@ -50,6 +50,7 @@ services:
 
   phpmyadmin:
       image: phpmyadmin/phpmyadmin
+      platform: linux/amd64
       container_name: beauporientation-phpmyadmin
       environment:
         PMA_HOST: database

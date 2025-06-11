@@ -30,7 +30,7 @@
         "symfony/cache": "7.2.*",
         "symfony/console": "*",
         "symfony/doctrine-messenger": "*",
-        "symfony/dotenv": "*",
+        "symfony/dotenv": "7.2.*",
         "symfony/expression-language": "*",
         "symfony/flex": "^2",
         "symfony/form": "*",
