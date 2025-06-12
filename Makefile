@@ -63,15 +63,3 @@ sf: ## List all Symfony commands or pass the parameter "c=" to run a given comma
 
 cc: c=c:c ## Clear the cache
 cc: sf
-
-## —— deploy preoject 🛠️ ———————————————————————————————————————————————
-prod: ## Deploy the project, pass the parameter "c=" to run a given command, example: make deploy c='--no-interaction'
-    @git fetch
-    @git pull
-    @$(DOCKER_COMP) down
-    @$(DOCKER_COMP) up -d
-    @$(DOCKER_COMP) exec php composer install --no-interaction --prefer-dist --no-dev --no-progress
-    @$(DOCKER_COMP) exec php php bin/console doctrine:migrations:migrate --no-interaction
-    @$(DOCKER_COMP) exec php php bin/console cache:clear
-    @$(DOCKER_COMP) exec php npm install
-    @$(DOCKER_COMP) exec php npm run build
