@@ -40,7 +40,10 @@ class ScanController extends AbstractController
         if (
             $runner->getCourse()->getId() !== $marker->getCourses()->getId()
         ) {
-            return new JsonResponse(['error' => 'Cette balise ne correspond pas à la course du coureur'], JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse(
+                ['status' => 'invalid', 'message' => 'Cette balise ne correspond pas à la course du coureur'],
+                422 // Unprocessable Entity
+            );
         }
 
         // Récupérer la position du scan
@@ -77,7 +80,10 @@ class ScanController extends AbstractController
         ]);
 
         if ($existing) {
-            return new JsonResponse(['status' => 'invalid', 'message' => 'Déjà scannée']);
+            return new JsonResponse(
+                ['status' => 'invalid', 'message' => 'Déjà scannée'],
+                422 // Unprocessable Entity
+            );
         }
 
         // Création du log (toujours, même si trop loin)
@@ -91,10 +97,16 @@ class ScanController extends AbstractController
         $em->flush();
 
         if ($distance > $_ENV['DISTANCE_SCAN']) {
-            return new JsonResponse(['status' => 'invalid', 'message' => 'Trop loin du marker (distance: ' . round($distance, 2) . ' m)']);
+            return new JsonResponse(
+                ['status' => 'invalid', 'message' => 'Trop loin du marker (distance: ' . round($distance, 2) . ' m)'],
+                422 // Unprocessable Entity
+            );
         }
 
-        return new JsonResponse(['status' => 'valid', 'message' => 'Scan validé']);
+        return new JsonResponse(
+            ['status' => 'valid', 'message' => 'Scan validé'],
+            200
+        );
     }
 
     /**
