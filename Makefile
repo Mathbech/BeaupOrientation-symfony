@@ -29,13 +29,13 @@ check-env: ## Vérifie que le fichier $(ENV_FILE) existe
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 
 build: check-env ## Builds Docker avec .env.docker
-	set -a && . $(ENV_FILE) && set +a && $(DOCKER_COMP) build --pull --no-cache
+	docker compose --env-file $(ENV_FILE) build
 
 start: ## Start the docker hub en detached mode avec .env.docker
-	set -a && . $(ENV_FILE) && set +a && $(DOCKER_COMP) up --detach
+	docker compose --env-file $(ENV_FILE) up --detach
 
 stop: ## Stop the docker hub avec .env.docker
-	set -a && . $(ENV_FILE) && set +a && $(DOCKER_COMP) down --remove-orphans
+	docker compose --env-file $(ENV_FILE) down --remove-orphans
 
 logs: ## Show live logs
 	@$(DOCKER_COMP) logs --tail=0 --follow
