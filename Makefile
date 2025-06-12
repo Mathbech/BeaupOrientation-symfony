@@ -20,9 +20,15 @@ SYMFONY  = $(PHP) bin/console
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9\./_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
+check-env: ## Vérifie que le fichier $(ENV_FILE) existe
+	@if [ ! -f $(ENV_FILE) ]; then \
+		echo "❌ Fichier $(ENV_FILE) introuvable !"; \
+		exit 1; \
+	fi
+
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 
-build: ## Builds the Docker images avec .env.docker
+build: check-env ## Builds Docker avec .env.docker
 	set -a && . $(ENV_FILE) && set +a && $(DOCKER_COMP) build --pull --no-cache
 
 start: ## Start the docker hub en detached mode avec .env.docker
