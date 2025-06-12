@@ -1,5 +1,7 @@
 # Beaup'Orientation
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Mathbech_BeaupOrientation-symfony&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Mathbech_BeaupOrientation-symfony)
+
 Bienvenue sur le projet **Beaup'Orientation**.
 
 ## Description
