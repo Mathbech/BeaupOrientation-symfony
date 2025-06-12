@@ -29,7 +29,7 @@ check-env: ## Vérifie que le fichier $(ENV_FILE) existe
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 
 build: check-env ## Builds Docker avec .env.docker
-	docker compose --env-file $(ENV_FILE) build
+	docker compose --env-file $(ENV_FILE) build --pull --no-cache
 
 start: ## Start the docker hub en detached mode avec .env.docker
 	docker compose --env-file $(ENV_FILE) up --detach
