@@ -14,7 +14,7 @@ class QrCodeService
 
     public function generateQrCodeForMarker(Markers $marker): string
     {
-        $data = $marker->getName();
+        $data = 'BALISE-' . $marker->getId();
 
         // ✅ Crée manuellement le QR code (v6.0.7)
         $qrCode = new QrCode($data);
