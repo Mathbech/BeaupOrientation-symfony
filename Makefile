@@ -23,13 +23,13 @@ help: ## Outputs this help screen
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 
 build: ## Builds the Docker images avec .env.docker
-	set -a && source $(ENV_FILE) && set +a && $(DOCKER_COMP) build --pull --no-cache
+	set -a && . $(ENV_FILE) && set +a && $(DOCKER_COMP) build --pull --no-cache
 
 start: ## Start the docker hub en detached mode avec .env.docker
-	set -a && source $(ENV_FILE) && set +a && $(DOCKER_COMP) up --detach
+	set -a && . $(ENV_FILE) && set +a && $(DOCKER_COMP) up --detach
 
 stop: ## Stop the docker hub avec .env.docker
-	set -a && source $(ENV_FILE) && set +a && $(DOCKER_COMP) down --remove-orphans
+	set -a && . $(ENV_FILE) && set +a && $(DOCKER_COMP) down --remove-orphans
 
 logs: ## Show live logs
 	@$(DOCKER_COMP) logs --tail=0 --follow
