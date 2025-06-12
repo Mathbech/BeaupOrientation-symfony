@@ -36,6 +36,13 @@ class ScanController extends AbstractController
             return new JsonResponse(['error' => 'Invalid runner or marker'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
+        // Vérifier que le marker appartient à la même course que le runner
+        if (
+            $runner->getCourse()->getId() !== $marker->getCourses()->getId()
+        ) {
+            return new JsonResponse(['error' => 'Cette balise ne correspond pas à la course du coureur'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
         // Récupérer la position du scan
         $scanLat = null;
         $scanLng = null;
