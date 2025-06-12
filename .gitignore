@@ -45,3 +45,6 @@ yarn-error.log
 ## ignore dbml files
 *.dbml
 dbml-error.log
+
+# ignore docker environment files
+.env.docker
