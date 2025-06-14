@@ -46,6 +46,20 @@ class TeacherController extends AbstractController
         if (!empty($coursesData)) {
             $coursesData = $coursesData[0]; // On prend uniquement la première entrée
             $coursesData['runners'] = !empty($coursesData['runners']) ? explode(',', $coursesData['runners']) : [];
+            if (!empty($coursesData['runners'])) {
+                $coursesData['runners'] = array_map(function ($runner) {
+                    // On récupère les champs séparés par ":"
+                    [$name, $code, $isTeacher] = array_pad(explode(':', $runner), 3, null);
+                    return [
+                        'name' => $name,
+                        'code' => $code,
+                        'isTeacher' => $isTeacher,
+                    ];
+                }, $coursesData['runners']);
+            } else {
+                $coursesData['runners'] = [];
+            }
+            dump($coursesData['runners']);
 
             // Combine points and QR codes into a single structure
             if (!empty($coursesData['point']) && !empty($coursesData['qrCode'])) {

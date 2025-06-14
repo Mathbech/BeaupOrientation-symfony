@@ -6,16 +6,30 @@
 
 {% block body %}
     <div class="container">
+        <h1>Détails de la course</h1>
+        <a href="{{ path('runner_add', { Id: coursesData.id }) }}" class="btn btn-primary mb-3">
+            Ajouter un coureur
+        </a>
         <table class="table">
             <thead>
                 <tr>
                     <th>Nom</th>
+                    <th>Code</th>
+                    <th>Professeur</th>
                 </tr>
             </thead>
             <tbody>
                 {% for runner in coursesData.runners %}
                     <tr>
-                        <td>{{ runner }}</td>
+                        <td>{{ runner.name }}</td>
+                        <td>{{ runner.code }}</td>
+                        <td>
+                            {% if runner.isTeacher %}
+                                Oui
+                            {% else %}
+                                Non
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

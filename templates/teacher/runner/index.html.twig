@@ -3,7 +3,6 @@
 {% set has_footer = false %}
 
 {% block title %}{% endblock %}
-
 {% block body %}
 <section class="content" style="min-height: 100vh; display: flex; align-items: center;">
     <div class="container-fluid">
@@ -12,24 +11,29 @@
             <div class="col-md-6">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Ajouter une course</h3>
+                        <h3 class="card-title">Ajouter un Runner</h3>
                     </div>
                     {{ form_start(form) }}
                     <div class="card-body">
                         <div class="form-group">
                             {{ form_label(form.name) }}
                             {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.name) }}
                         </div>
-                        {# <div class="form-group">
-                            {{ form_label(form.parcours) }}
-                            {{ form_widget(form.parcours, {'attr': {'class': 'form-control'}}) }}
-                        </div> #}
+                        <div class="form-group">
+                            {{ form_label(form.code) }}
+                            {{ form_widget(form.code, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.code) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.isTeacher) }}
+                            {{ form_widget(form.isTeacher, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.isTeacher) }}
+                        </div>
+                        {{ form_rest(form) }}
                     </div>
-                    {{ form_rest(form) }}
-                    <!-- /.card-body -->
-
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
                     </div>
                     {{ form_end(form) }}
                 </div>
