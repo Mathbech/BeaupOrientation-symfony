@@ -59,7 +59,6 @@ class TeacherController extends AbstractController
             } else {
                 $coursesData['runners'] = [];
             }
-            dump($coursesData['runners']);
 
             // Combine points and QR codes into a single structure
             if (!empty($coursesData['point']) && !empty($coursesData['qrCode'])) {

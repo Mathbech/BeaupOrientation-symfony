@@ -72,7 +72,6 @@ class ScanController extends AbstractController
 
         // Calculer la distance (en mètres)
         $distance = $this->haversineDistance($scanLat, $scanLng, $markerLat, $markerLng);
-        dump($distance); // Pour débogage, à retirer en production
         // Vérifie si déjà scanné
         $existing = $em->getRepository(LogScan::class)->findOneBy([
             'runner' => $runner,
@@ -119,12 +118,6 @@ class ScanController extends AbstractController
         float $markerLng
     ): float {
         $earthRadius = 6371000; // mètres
-        dump([
-            'scanLat' => $scanLat,
-            'scanLng' => $scanLng,
-            'markerLat' => $markerLat,
-            'markerLng' => $markerLng,
-        ]);
 
         // Conversion des degrés en radians
         $scanLatRad = deg2rad($scanLat);

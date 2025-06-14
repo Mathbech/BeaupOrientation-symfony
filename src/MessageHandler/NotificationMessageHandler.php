@@ -12,6 +12,5 @@ class NotificationMessageHandler
     {
         // Traitement du message
         // Exemple : log, notif, ou juste un dump
-        dump('Message reçu via Redis : ' . $message->content);
     }
 }
