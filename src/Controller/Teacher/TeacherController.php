@@ -138,7 +138,7 @@ class TeacherController extends AbstractController
 
         if ($forms->isSubmitted() && $forms->isValid()) {
             $course = $forms->getData();
-            $course->setUser($this->user);
+            $course->setUser($this->getUser());
             $em->persist($course);
             $em->flush();
             return $this->redirectToRoute('teacher_home');
