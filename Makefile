@@ -69,3 +69,17 @@ sf: ## List all Symfony commands or pass the parameter "c=" to run a given comma
 
 cc: c=c:c ## Clear the cache
 cc: sf
+
+deploy: ## Déploiement complet du projet
+	@echo "📦 Installation des dépendances PHP..."
+	@$(COMPOSER) install --no-interaction --prefer-dist --no-progress
+	@echo "🧱 Migration de la base de données..."
+	@$(SYMFONY) doctrine:migrations:migrate --no-interaction
+	@echo "🧼 Nettoyage du cache Symfony..."
+	@$(SYMFONY) cache:clear
+	@echo "📦 Installation des dépendances Node.js..."
+	@$(DOCKER_COMP) exec php npm install
+	@echo "🛠️  Compilation des assets..."
+	@$(DOCKER_COMP) exec php npm run build
+	@echo "✅ Déploiement terminé avec succès."
+
