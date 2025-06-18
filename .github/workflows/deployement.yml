@@ -1,7 +1,13 @@
+name: Beaup'orientation deloyement
+
+on:
+  push:
+    branches: [ prod ]
+
+jobs:
   deployment:
     name: Deployment with VPN
     runs-on: ubuntu-latest
-    needs: ci
     if: github.ref == 'refs/heads/prod'
     steps:
       - name: Checkout code
@@ -29,7 +35,8 @@
             git pull origin prod
             make deploy
           EOF
-            - name: Affichage si le déploiement échoue
+
+      - name: Affichage si le déploiement échoue
         if: failure()
         run: |
           echo ""
@@ -38,7 +45,7 @@
           echo "Auteur        : ${{ github.actor }}"
           echo "Voir les logs : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo ""
-      
+
       - name: Affichage si le déploiement réussit
         if: success()
         run: |
@@ -48,4 +55,3 @@
           echo "Auteur        : ${{ github.actor }}"
           echo "Voir les logs : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo ""
-
