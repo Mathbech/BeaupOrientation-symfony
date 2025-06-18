@@ -31,7 +31,7 @@ jobs:
       - name: Deploy with SSH using password
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /chemin/vers/projet
+            cd ./BeaupOrientation-symfony/
             git pull origin prod
             make deploy
           EOF
