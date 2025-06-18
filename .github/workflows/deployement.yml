@@ -1,14 +1,17 @@
-name: Beaup'orientation deloyement
+name: Beaup'orientation Deployment
 
 on:
-  push:
-    branches: [ prod ]
+  workflow_run:
+    workflows: ["Beaup'orientation CI"]
+    types:
+      - completed
 
 jobs:
   deployment:
     name: Deployment with VPN
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'prod' }}
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/prod'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,15 +21,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y openvpn sshpass
 
-      - name: Create VPN config file
+      - name: Create VPN config and credentials
         run: |
           echo "${{ secrets.VPN_CONFIG }}" > vpn.conf
+          echo -e "${{ secrets.VPN_USER }}\n${{ secrets.VPN_PASSWORD }}" > vpn.auth
+          sed -i 's|auth-user-pass|auth-user-pass vpn.auth|' vpn.conf
 
       - name: Start VPN
         run: |
           sudo openvpn --config vpn.conf --daemon
-          sleep 10  # attend que le tunnel VPN soit monté
-          ip a
+          sleep 10
+          ip a  # debug
 
       - name: Deploy with SSH using password
         run: |
@@ -41,8 +46,8 @@ jobs:
         run: |
           echo ""
           echo "🚨🚨🚨 DÉPLOIEMENT ÉCHOUÉ 🚨🚨🚨"
-          echo "Branche       : ${{ github.ref_name }}"
-          echo "Auteur        : ${{ github.actor }}"
+          echo "Branche       : ${{ github.event.workflow_run.head_branch }}"
+          echo "Auteur        : ${{ github.event.workflow_run.head_commit.author.name }}"
           echo "Voir les logs : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo ""
 
@@ -51,7 +56,7 @@ jobs:
         run: |
           echo ""
           echo "✅✅✅ DÉPLOIEMENT RÉUSSI ✅✅✅"
-          echo "Branche       : ${{ github.ref_name }}"
-          echo "Auteur        : ${{ github.actor }}"
+          echo "Branche       : ${{ github.event.workflow_run.head_branch }}"
+          echo "Auteur        : ${{ github.event.workflow_run.head_commit.author.name }}"
           echo "Voir les logs : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo ""
