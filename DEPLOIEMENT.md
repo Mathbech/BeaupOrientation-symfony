@@ -12,10 +12,11 @@ cd ~
 git clone <url-du-projet>
 ```
 
-### 3. Accéder au répertoire du projet
+### 3. Accéder au répertoire du projet et passer sur la branche de production
 
 ```bash
-cd <nom-du-répertoire-cloné>
+cd BeaupOrientation-Symfony
+git checkout prod
 ```
 
 ### 4. Préparer les fichiers d’environnement
@@ -35,7 +36,6 @@ IMAGES_PREFIX=beauporientation-
 MYSQL_DB=app
 MYSQL_USER=app
 MYSQL_PASSWORD=password
-SERVER_NAME=std23.beaupeyrat.com
 ```
 
 ### 5. Builder et démarrer les conteneurs
