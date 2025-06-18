@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Security\LoginAuthenticator;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+
 
 class RegistrationController extends AbstractController
 {
@@ -36,8 +39,14 @@ class RegistrationController extends AbstractController
 
 
     #[Route('/register/your-credentials', name: 'app_register_step_2')]
-    public function register_step_2(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
-    {
+    public function register_step_2(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager,
+        UserAuthenticatorInterface $userAuthenticator,
+        LoginAuthenticator $authenticator
+    ): Response
+{
         $session = $request->getSession();
         $school = $session->get('school');
 
@@ -50,25 +59,25 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
-
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-
             $user->setSchools($school);
+            $user->setRoles(['ROLE_TEACHER']);
 
-            // Persist both the user and the school
             $entityManager->persist($school);
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Clear the session
             $session->remove('school');
 
-            // Redirect to the admin page or any other page
-            return $this->redirectToRoute('teacher_dashboard');
+            // 🔐 Auto login
+            return $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
+            );
         }
+
 
         return $this->render('Security/registration/register_step_2.html.twig', [
             'registrationForm' => $form,

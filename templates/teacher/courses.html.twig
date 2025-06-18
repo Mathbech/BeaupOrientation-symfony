@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+{% set has_navbar = true %}
+{% set has_footer = false %}
+
+{% block title %}Détails de la course{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Détails de la course</h1>
+        <a href="{{ path('runner_add', { Id: coursesData.id }) }}" class="btn btn-primary mb-3">
+            Ajouter un coureur
+        </a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Code</th>
+                    <th>Professeur</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for runner in coursesData.runners %}
+                    <tr>
+                        <td>{{ runner.name }}</td>
+                        <td>{{ runner.code }}</td>
+                        <td>
+                            {% if runner.isTeacher %}
+                                Oui
+                            {% else %}
+                                Non
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Markers</h3>
+         <!-- Bouton pour imprimer tous les QR codes -->
+        <button class="btn btn-secondary mb-3" onclick="printAllQrCodes()">
+            Imprimer tous les QR Codes
+        </button>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>QR Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for marker in coursesData.markers %}
+                    <tr>
+                        <td>{{ markerTypes[marker.type]|default('Inconnu') }}</td>
+                        <td>{{ marker.latitude }}</td>
+                        <td>{{ marker.longitude }}</td>
+                        <td>
+                            {% if marker.qrCode %}
+                                <div class="qr-code-block" style="text-align: center;">
+                                    <img src="{{ asset('uploads' ~ marker.qrCode) }}" alt="QR Code" class="qr-code-img" style="width: 100px; height: 100px;">
+                                    <div class="qr-code-name" style="margin-top: 5px;">{{ marker.name }}</div>
+                                </div>
+                                <br>
+                                {# <button class="btn btn-secondary btn-sm mt-2" onclick="printQrCode('{{ asset('uploads' ~ marker.qrCode) }}', '{{ marker.name|e('js') }}')">
+                                    Imprimer
+                                </button> #}
+                            {% else %}
+                                <a href="{{ path('marker_generate_qr', { id: marker.id }) }}" class="btn btn-primary">
+                                    Générer QR Code
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function printQrCode(imageUrl, markerName) {
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+            const htmlContent = '<html>' +
+                '<head>' +
+                '<title>Impression du QR Code</title>' +
+                '<style>' +
+                'body { text-align: center; margin: 0; padding: 20px; }' +
+                'img { max-width: 100%; height: auto; }' +
+                '.qr-code-name { margin-top: 10px; font-size: 18px; font-weight: bold; }' +
+                '</style>' +
+                '</head>' +
+                '<body>' +
+                '<img src="' + imageUrl + '" alt="QR Code"><br>' +
+                '<div class="qr-code-name">' + markerName + '</div>' +
+                '<scr' + 'ipt>' +
+                'window.onload = function() {' +
+                'window.print();' +
+                'window.close();' +
+                '};' +
+                '</scr' + 'ipt>' +
+                '</body>' +
+                '</html>';
+            printWindow.document.open();
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+        } else {
+            alert("Impossible d'ouvrir la fenêtre d'impression.");
+        }
+    }
+
+    function printAllQrCodes() {
+        // Récupère tous les blocs QR affichés
+        const qrBlocks = document.querySelectorAll('.qr-code-block');
+        if (qrBlocks.length === 0) {
+            alert("Aucun QR Code à imprimer.");
+            return;
+        }
+
+        let htmlContent = '<html><head><title>Impression des QR Codes</title><style>body{text-align:center;margin:0;padding:20px;} img{max-width:100%;height:auto;margin:10px;} .qr-code-name{margin-top:10px;font-size:18px;font-weight:bold;}</style></head><body>';
+        qrBlocks.forEach(block => {
+            const img = block.querySelector('.qr-code-img');
+            const name = block.querySelector('.qr-code-name');
+            if (img && name) {
+                htmlContent += '<div style="display:inline-block;margin:20px;"><img src="' + img.src + '" alt="QR Code"><br><div class="qr-code-name">' + name.textContent + '</div></div>';
+            }
+        });
+        htmlContent += '<script>window.onload=function(){window.print();window.close();};<\/script></body></html>';
+
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+            printWindow.document.open();
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+        } else {
+            alert("Impossible d'ouvrir la fenêtre d'impression.");
+        }
+    }
+</script>
+{% endblock %}

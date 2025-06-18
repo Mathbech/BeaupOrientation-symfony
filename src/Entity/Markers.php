@@ -29,6 +29,13 @@ use LongitudeOne\Spatial\PHP\Types\SpatialInterface;
 
 class Markers
 {
+
+    public const TYPES = [
+        1 => 'Départ',
+        2 => 'Arrivée',
+        3 => 'Balise',
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -61,19 +68,28 @@ class Markers
     #[ORM\ManyToOne(inversedBy: 'markers')]
     private ?User $teacher = null;
 
-    /**
-     * @var Collection<int, Parcours>
-     */
-    #[ORM\ManyToMany(targetEntity: Parcours::class, mappedBy: 'markers')]
-    private Collection $parcours;
+    // /**
+    //  * @var Collection<int, Parcours>
+    //  */
+    // #[ORM\ManyToMany(targetEntity: Parcours::class, mappedBy: 'markers')]
+    // private Collection $parcours;
 
     #[ORM\Column(type: 'geometry_point', nullable: true)]
     private ?SpatialInterface $point = null;
 
-    public function __construct()
-    {
-        $this->parcours = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'markers')]
+    private ?Courses $courses = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
+
+    #[ORM\Column]
+    private ?int $type = null;
+
+    // public function __construct()
+    // {
+    //     $this->parcours = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -188,32 +204,32 @@ class Markers
         return $this;
     }
 
-    /**
-     * @return Collection<int, Parcours>
-     */
-    public function getParcours(): Collection
-    {
-        return $this->parcours;
-    }
+    // /**
+    //  * @return Collection<int, Parcours>
+    //  */
+    // public function getParcours(): Collection
+    // {
+    //     return $this->parcours;
+    // }
 
-    public function addParcour(Parcours $parcour): static
-    {
-        if (!$this->parcours->contains($parcour)) {
-            $this->parcours->add($parcour);
-            $parcour->addMarker($this);
-        }
+    // public function addParcour(Parcours $parcour): static
+    // {
+    //     if (!$this->parcours->contains($parcour)) {
+    //         $this->parcours->add($parcour);
+    //         $parcour->addMarker($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeParcour(Parcours $parcour): static
-    {
-        if ($this->parcours->removeElement($parcour)) {
-            $parcour->removeMarker($this);
-        }
+    // public function removeParcour(Parcours $parcour): static
+    // {
+    //     if ($this->parcours->removeElement($parcour)) {
+    //         $parcour->removeMarker($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getPoint(): ?SpatialInterface
     {
@@ -227,6 +243,42 @@ class Markers
         }
 
         $this->point = $point;
+
+        return $this;
+    }
+
+    public function getCourses(): ?Courses
+    {
+        return $this->courses;
+    }
+
+    public function setCourses(?Courses $courses): static
+    {
+        $this->courses = $courses;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

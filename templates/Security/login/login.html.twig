@@ -1,31 +1,63 @@
 {% extends 'base.html.twig' %}
+{% set has_navbar = false %}
+{% set has_footer = false %}
 
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<div class="hold-transition login-page">
+<div class="login-box">
+</div>
+  <!-- /.login-logo -->
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <p>BeaupOrientation</p>
+    </div>
+    <div class="card-body">
+      <p class="login-box-msg">Login</p>
 
-    {% if app.user %}
-        <div class="mb-3">
+      <form method="post">
+        {% if error %}
+          <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+          <div class="mb-3">
             You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+          </div>
+        {% endif %}
+
+        <div class="input-group mb-3">
+          <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" autocomplete="email" required autofocus>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
         </div>
-    {% endif %}
+        <div class="input-group mb-3">
+          <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" autocomplete="current-password" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+          <!-- /.col -->
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+      <p class="mb-0">
+        <a href=" {{ path('app_register_step_1') }} " class="text-center">Register a new membership</a>
+      </p>
+    </div>
+  </div>
+  <!-- /.card -->
+</div>
 {% endblock %}

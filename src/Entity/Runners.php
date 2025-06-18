@@ -92,7 +92,7 @@ class Runners
         return $this->isTeacher;
     }
 
-    public function setTeacher(bool $isTeacher): static
+    public function setisTeacher(bool $isTeacher): static
     {
         $this->isTeacher = $isTeacher;
 

@@ -20,8 +20,8 @@ class Courses
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'courses')]
-    private ?Parcours $parcours = null;
+    // #[ORM\ManyToOne(inversedBy: 'courses')]
+    // private ?Parcours $parcours = null;
 
     #[ORM\ManyToOne(inversedBy: 'courses')]
     private ?User $user = null;
@@ -32,9 +32,16 @@ class Courses
     #[ORM\OneToMany(targetEntity: Runners::class, mappedBy: 'course')]
     private Collection $runners;
 
+    /**
+     * @var Collection<int, Markers>
+     */
+    #[ORM\OneToMany(targetEntity: Markers::class, mappedBy: 'courses')]
+    private Collection $markers;
+
     public function __construct()
     {
         $this->runners = new ArrayCollection();
+        $this->markers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -54,17 +61,17 @@ class Courses
         return $this;
     }
 
-    public function getParcours(): ?Parcours
-    {
-        return $this->parcours;
-    }
+    // public function getParcours(): ?Parcours
+    // {
+    //     return $this->parcours;
+    // }
 
-    public function setParcours(?Parcours $parcours): static
-    {
-        $this->parcours = $parcours;
+    // public function setParcours(?Parcours $parcours): static
+    // {
+    //     $this->parcours = $parcours;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getUser(): ?User
     {
@@ -102,6 +109,36 @@ class Courses
             // set the owning side to null (unless already changed)
             if ($runner->getCourse() === $this) {
                 $runner->setCourse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Markers>
+     */
+    public function getMarkers(): Collection
+    {
+        return $this->markers;
+    }
+
+    public function addMarker(Markers $marker): static
+    {
+        if (!$this->markers->contains($marker)) {
+            $this->markers->add($marker);
+            $marker->setCourses($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarker(Markers $marker): static
+    {
+        if ($this->markers->removeElement($marker)) {
+            // set the owning side to null (unless already changed)
+            if ($marker->getCourses() === $this) {
+                $marker->setCourses(null);
             }
         }
 

@@ -29,3 +29,22 @@
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 /logstash/*
+
+/node_modules/
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
+
+/public/uploads/qrcodes/
+!/public/uploads/qrcodes/.gitkeep
+
+## ignore dbml files
+*.dbml
+dbml-error.log
+
+# ignore docker environment files
+.env.docker

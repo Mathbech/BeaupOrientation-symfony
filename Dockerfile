@@ -18,12 +18,21 @@ VOLUME /app/var/
 # persistent / runtime deps
 # hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends \
-	acl \
-	file \
-	gettext \
-	git \
-	openssl \
-	&& rm -rf /var/lib/apt/lists/*
+    acl \
+    file \
+    gettext \
+    git \
+	nodejs \
+	npm \
+    openssl \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd \
+    && pecl install redis && docker-php-ext-enable redis
+
 
 RUN set -eux; \
 	install-php-extensions \

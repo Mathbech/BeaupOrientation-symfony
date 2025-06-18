@@ -16,28 +16,42 @@ class CoursesRepository extends ServiceEntityRepository
         parent::__construct($registry, Courses::class);
     }
 
-    //    /**
-    //     * @return Courses[] Returns an array of Courses objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Display courses by users
+     *
+     * @return array
+     * @author Mathieu Bechade
+     */
+    public function getCoursesByUser(
+        ?string $user = null,
+        ?int $id = null
+    ): array {
+        $qb = $this->createQueryBuilder('c')
+            ->select('c.id, c.name')
+            ->addSelect('COUNT(DISTINCT r.id) AS runnercount')
+            ->addSelect('COUNT(DISTINCT m.id) AS markers')
+            ->leftJoin('c.runners', 'r')
+            ->leftJoin('c.markers', 'm')
+            ->groupBy('c.id');
 
-    //    public function findOneBySomeField($value): ?Courses
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if (!empty($user)) {
+            $qb->andWhere('c.user = :user')
+                ->setParameter('user', $user);
+        }
+
+        if (!empty($id)) {
+            $qb->andWhere('c.id = :id')
+                ->setParameter('id', $id);
+
+            // Concatène les informations des markers (latitude, longitude, QR code et ID)
+            $qb->addSelect("group_concat(DISTINCT CONCAT(m.id, ':', st_x(m.point), ':', st_y(m.point), ':', COALESCE(m.qrCode, ''), ':', COALESCE(m.type, ''), ':', COALESCE(m.name, ''))) AS markersData");
+
+            $qb->addSelect("group_concat(DISTINCT CONCAT(r.name, ':', r.code, ':', r.isTeacher)) AS runners");
+        }
+
+        return $qb->getQuery()
+            ->getResult();
+    }
+
+
 }

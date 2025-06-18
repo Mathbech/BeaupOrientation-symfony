@@ -1,3 +1,6 @@
+#Environnement variables docker
+ENV_FILE ?= .env.docker
+
 # Executables (local)
 DOCKER_COMP = docker compose
 
@@ -17,15 +20,22 @@ SYMFONY  = $(PHP) bin/console
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9\./_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
+check-env: ## Vérifie que le fichier $(ENV_FILE) existe
+	@if [ ! -f $(ENV_FILE) ]; then \
+		echo "❌ Fichier $(ENV_FILE) introuvable !"; \
+		exit 1; \
+	fi
+
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
-build: ## Builds the Docker images
-	@$(DOCKER_COMP) build --pull --no-cache
 
-start: ## Start the docker hub in detached mode (no logs)
-	@$(DOCKER_COMP) up --detach
+build: check-env ## Builds Docker avec .env.docker
+	docker compose --env-file $(ENV_FILE) build --pull --no-cache
 
-stop: ## Stop the docker hub
-	@$(DOCKER_COMP) down --remove-orphans
+start: ## Start the docker hub en detached mode avec .env.docker
+	docker compose --env-file $(ENV_FILE) up --detach
+
+stop: ## Stop the docker hub avec .env.docker
+	docker compose --env-file $(ENV_FILE) down --remove-orphans
 
 logs: ## Show live logs
 	@$(DOCKER_COMP) logs --tail=0 --follow
@@ -39,7 +49,7 @@ bash: ## Connect to the FrankenPHP container via bash so up and down arrows go t
 test: ## Start tests with phpunit, pass the parameter "c=" to add options to phpunit, example: make test c="--group e2e --stop-on-failure"
 	@$(eval c ?=)
 	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/phpunit $(c)
-	
+
 update: ## Update the project
 	@$(DOCKER_COMP) exec php composer update
 

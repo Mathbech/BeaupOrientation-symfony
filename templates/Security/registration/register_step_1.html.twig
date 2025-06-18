@@ -1,20 +1,71 @@
 {% extends 'base.html.twig' %}
+{% set has_navbar = false %}
+{% set has_footer = false %}
 
 {% block title %}Register Your school{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+<div class="hold-transition login-page">
+  <div class="login-box">
+    <div class="card card-outline card-primary">
+      <div class="card-header text-center">
+        <p>BeaupOrientation</p>
+      </div>
+      <div class="card-body">
+        <p class="login-box-msg">Register your school</p>
 
-    {{ form_errors(registrationFormStep1) }}
+        {{ form_errors(registrationFormStep1) }}
 
-    {{ form_start(registrationFormStep1) }}
-        {{ form_row(registrationFormStep1.name) }}
-        {{ form_row(registrationFormStep1.city) }}
-        {{ form_row(registrationFormStep1.zipCode) }}
-        {{ form_row(registrationFormStep1.adress) }}
-        {{ form_row(registrationFormStep1.country) }}
+        {{ form_start(registrationFormStep1) }}
+          <div class="input-group mb-3">
+            {{ form_widget(registrationFormStep1.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom de l\'établissement'}}) }}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-school"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            {{ form_widget(registrationFormStep1.city, {'attr': {'class': 'form-control', 'placeholder': 'Ville'}}) }}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-city"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            {{ form_widget(registrationFormStep1.zipCode, {'attr': {'class': 'form-control', 'placeholder': 'Code postal'}}) }}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-mail-bulk"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            {{ form_widget(registrationFormStep1.adress, {'attr': {'class': 'form-control', 'placeholder': 'Adresse'}}) }}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-map-marker-alt"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            {{ form_widget(registrationFormStep1.country, {'attr': {'class': 'form-control', 'placeholder': 'Pays'}}) }}
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-flag"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btn-block">Next</button>
+            </div>
+          </div>
+        {{ form_end(registrationFormStep1) }}
 
-        <button type="submit" class="btn">Next</button>
-    {{ form_end(registrationFormStep1) }}
-
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
