@@ -1,0 +1,51 @@
+  deployment:
+    name: Deployment with VPN
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.ref == 'refs/heads/prod'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install OpenVPN and sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openvpn sshpass
+
+      - name: Create VPN config file
+        run: |
+          echo "${{ secrets.VPN_CONFIG }}" > vpn.conf
+
+      - name: Start VPN
+        run: |
+          sudo openvpn --config vpn.conf --daemon
+          sleep 10  # attend que le tunnel VPN soit monté
+          ip a
+
+      - name: Deploy with SSH using password
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd /chemin/vers/projet
+            git pull origin prod
+            make deploy
+          EOF
+            - name: Affichage si le déploiement échoue
+        if: failure()
+        run: |
+          echo ""
+          echo "🚨🚨🚨 DÉPLOIEMENT ÉCHOUÉ 🚨🚨🚨"
+          echo "Branche       : ${{ github.ref_name }}"
+          echo "Auteur        : ${{ github.actor }}"
+          echo "Voir les logs : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo ""
+      
+      - name: Affichage si le déploiement réussit
+        if: success()
+        run: |
+          echo ""
+          echo "✅✅✅ DÉPLOIEMENT RÉUSSI ✅✅✅"
+          echo "Branche       : ${{ github.ref_name }}"
+          echo "Auteur        : ${{ github.actor }}"
+          echo "Voir les logs : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo ""
+
