@@ -76,4 +76,46 @@ class ScanQrCodeCest
         ]);
     }
 
+    public function testScanQrCodeWithEmptyRunner(ApiTester $I)
+    {
+        $I->wantTo('Scan a QR code with runner_id null');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/logscan/scan', [
+            "runner_id" => null, // Pas de runner_id
+            "marker_code" => "BALISE-2",
+            "scannedAt" => "2025-06-19T12:00:00Z",
+            "point" => [
+                "srid" => 4326,
+                "type" => "Point",
+                "coordinates" => [1.4450, 43.6020]
+            ]
+        ]);
+        $I->seeResponseCodeIs(400);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'error' => 'runner_id and marker_code are required'
+        ]);
+    }
+
+    public function testScanQrCodeWithEmptyMarker(ApiTester $I)
+    {
+        $I->wantTo('Scan a QR code with empty marker_code');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/logscan/scan', [
+            "runner_id" => 2,
+            "marker_code" => "",
+            "scannedAt" => "2025-06-19T12:00:00Z",
+            "point" => [
+                "srid" => 4326,
+                "type" => "Point",
+                "coordinates" => [1.4450, 43.6020]
+            ]
+        ]);
+        $I->seeResponseCodeIs(400);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'error' => 'runner_id and marker_code are required'
+        ]);
+    }
+
 }
