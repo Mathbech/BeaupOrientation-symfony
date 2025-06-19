@@ -19,10 +19,12 @@ INSERT INTO courses (id, user_id, name) VALUES
 
 -- Markers
 INSERT INTO markers (id, teacher_id, latitude, longitude, city, address, zip_code, country, qr_code, deleting, point, courses_id, name, type) VALUES
-(1, 1, '48.8566', '2.3522', 'Paris', 'Place de la République', '75010', 'France', 'marker1.png', NULL, ST_PointFromText('POINT(2.3522 48.8566)', 4326), 1, 'Marker A', 1),
-(2, 2, '43.6045', '1.4442', 'Toulouse', 'Capitole', '31000', 'France', 'marker2.png', NULL, ST_PointFromText('POINT(1.4442 43.6045)', 4326), 2, 'Marker B', 2);
+(1, 2, '48.8566', '2.3522', 'Paris', 'Place de la République', '75010', 'France', 'marker1.png', NULL, ST_PointFromText('POINT(2.3522 48.8566)', 4326), 1, 'BALISE-1', 1),
+(2, 2, '43.6045', '1.4442', 'Toulouse', 'Capitole', '31000', 'France', 'marker2.png', NULL, ST_PointFromText('POINT(1.4442 43.6045)', 4326), 1, 'BALISE-2', 2);
 
 -- Runners
 INSERT INTO runners (id, course_id, name, code, is_teacher, teacher_id_id) VALUES
 (1, 1, 'Prof1', 'Course1-1', 1, 2),
-(2, 1, 'Runner 1', 'Course1-2', 0, NULL);
+(2, 1, 'Runner 1', 'Course1-2', 0, NULL),
+(3, 2, 'Prof2', 'Course2-1', 1, 2),
+(4, 2, 'Runner 2', 'Course2-2', 0, NULL);

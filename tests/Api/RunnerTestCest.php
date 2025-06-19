@@ -53,4 +53,22 @@ class RunnerTestCest
             'courseId' => 1
         ]);
     }
+
+    public function testPostLoginRunnerOtherCourses(ApiTester $I)
+    {
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPOST('/runners/login', [
+            'code' => 'Course2-2'
+        ]);
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            'id' => 4,
+            'course' => 'Course B',
+            'name' => 'Runner 2',
+            'isTeacher' => false,
+            'teacherId' => null,
+            'courseId' => 2
+        ]);
+    }
 }
