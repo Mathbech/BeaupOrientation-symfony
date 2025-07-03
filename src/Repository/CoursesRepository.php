@@ -46,7 +46,7 @@ class CoursesRepository extends ServiceEntityRepository
             // Concatène les informations des markers (latitude, longitude, QR code et ID)
             $qb->addSelect("group_concat(DISTINCT CONCAT(m.id, ':', st_x(m.point), ':', st_y(m.point), ':', COALESCE(m.qrCode, ''), ':', COALESCE(m.type, ''), ':', COALESCE(m.name, ''))) AS markersData");
 
-            $qb->addSelect("group_concat(DISTINCT CONCAT(r.name, ':', r.code, ':', r.isTeacher)) AS runners");
+            $qb->addSelect("group_concat(DISTINCT CONCAT(r.id, ':', r.name, ':', r.code, ':', r.isTeacher)) AS runners");
         }
 
         return $qb->getQuery()

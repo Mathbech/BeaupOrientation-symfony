@@ -16,6 +16,7 @@
                     <th>Nom</th>
                     <th>Code</th>
                     <th>Professeur</th>
+                    <th>Détails</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,6 +29,13 @@
                                 Oui
                             {% else %}
                                 Non
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not runner.isTeacher %}
+                                <a href="{{ path('runner_details', { Id: coursesData.id, id: runner.id }) }}" class="btn btn-info">
+                                    Voir Détails
+                                </a>
                             {% endif %}
                         </td>
                     </tr>
