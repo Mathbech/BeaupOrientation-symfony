@@ -43,4 +43,21 @@ final class RunnerController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/details/{id}', name: 'runner_details')]
+    public function details(int $id, EntityManagerInterface $em, int $Id): Response
+    {
+        $runner = $em->getRepository(Runners::class)->find($id);
+        if (!$runner) {
+            throw $this->createNotFoundException('Runner not found');
+        }
+
+        $logs = $em->getRepository(\App\Entity\LogScan::class)->findBy(['runner' => $id]);
+
+        return $this->render('teacher/runner/details.html.twig', [
+            'runner' => $runner,
+            'logs' => $logs,
+            'courseId' => $Id,
+        ]);
+    }
 }

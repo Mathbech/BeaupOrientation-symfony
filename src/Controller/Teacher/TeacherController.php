@@ -49,8 +49,9 @@ class TeacherController extends AbstractController
             if (!empty($coursesData['runners'])) {
                 $coursesData['runners'] = array_map(function ($runner) {
                     // On récupère les champs séparés par ":"
-                    [$name, $code, $isTeacher] = array_pad(explode(':', $runner), 3, null);
+                    [$id, $name, $code, $isTeacher] = array_pad(explode(':', $runner), 3, null);
                     return [
+                        'id' => $id,
                         'name' => $name,
                         'code' => $code,
                         'isTeacher' => $isTeacher,
