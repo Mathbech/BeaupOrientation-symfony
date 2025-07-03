@@ -78,10 +78,10 @@ class ScanController extends AbstractController
             'marker' => $marker,
         ]);
 
-        if ($existing) {
+        if ($existing && $existing->getStatut() === 1) {
             return new JsonResponse(
-                ['status' => 'invalid', 'message' => 'Déjà scannée'],
-                422 // Unprocessable Entity
+            ['status' => 'invalid', 'message' => 'Déjà scannée'],
+            422 // Unprocessable Entity
             );
         }
 
