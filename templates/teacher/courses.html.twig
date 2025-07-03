@@ -32,9 +32,11 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ path('runner_details', { Id: coursesData.id, id: runner.id }) }}" class="btn btn-info">
-                                Voir Détails
-                            </a>
+                            {% if not runner.isTeacher %}
+                                <a href="{{ path('runner_details', { Id: coursesData.id, id: runner.id }) }}" class="btn btn-info">
+                                    Voir Détails
+                                </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

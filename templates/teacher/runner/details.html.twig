@@ -4,5 +4,49 @@
 
 {% block title %}{% endblock %}
 {% block body %}
+<h2>Logs de scan</h2>
+<a href="{{ path('teacher_courses', { id: courseId }) }}" class="btn btn-secondary mb-3">
+    &larr; Revenir à la course
+</a>
+<table id="logs-table" class="table table-bordered table-striped datatable">
+    <thead>
+        <tr>
+            <th>Date/Heure</th>
+            <th>Balise</th>
+            <th>Position scan</th>
+            <th>Position balise</th>
+            <th>Statut</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+            <tr>
+                <td>{{ log.scannedAt|date('d/m/Y H:i:s') }}</td>
+                <td>{{ log.marker ? log.marker.name : 'N/A' }}</td>
+                <td>
+                    {% if log.point %}
+                        {{ log.point.y }}, {{ log.point.x }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>
+                    {% if log.marker and log.marker.point %}
+                        {{ log.marker.point.x }}, {{ log.marker.point.y }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>
+                    {% if log.statut == 1 %}
+                        <span class="badge bg-success">Valide</span>
+                    {% else %}
+                        <span class="badge bg-danger">Invalide</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}

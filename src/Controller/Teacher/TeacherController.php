@@ -57,7 +57,6 @@ class TeacherController extends AbstractController
                         'isTeacher' => $isTeacher,
                     ];
                 }, $coursesData['runners']);
-            dump($coursesData['runners']); // On transforme chaque runner en tableau associatif
             } else {
                 $coursesData['runners'] = [];
             }
