@@ -16,6 +16,7 @@
                     <th>Nom</th>
                     <th>Code</th>
                     <th>Professeur</th>
+                    <th>Détails</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +30,11 @@
                             {% else %}
                                 Non
                             {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('runner_details', { Id: coursesData.id, id: runner.id }) }}" class="btn btn-info">
+                                Voir Détails
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}
