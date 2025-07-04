@@ -21,13 +21,15 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 $(function () {
   $("#courses-table").DataTable({
     "responsive": true,
-    "lengthChange": false,
-    "autoWidth": false,
-  })
-  $("#parcours-table").DataTable({
-    "responsive": true,
     "lengthChange": true,
-    "autoWidth": true,
+    "autoWidth": false,
+    "paging": true,
+    "pageLength": 10,
+    "lengthMenu": [5, 10, 25, 50, 100],
+    "order": [[0, "desc"]],
+    "language": {
+      "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
+    }
   })
   $("#logs-table").DataTable({
     "responsive": true,
@@ -41,4 +43,17 @@ $(function () {
       "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
     }
   })
+
+  $("#runners-table").DataTable({
+    "responsive": true,
+    "lengthChange": true,
+    "autoWidth": false,
+    "paging": true,
+    "pageLength": 10,
+    "lengthMenu": [5, 10, 25, 50, 100],
+    "order": [[0, "desc"]],
+    "language": {
+      "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
+    }
+  });
 });
